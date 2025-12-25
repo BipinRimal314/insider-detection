@@ -387,4 +387,61 @@ def timestamp() -> str:
     """Get current timestamp as string"""
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+def flatten_sequences(X):
+    """
+    Flattens 3D sequences (samples, timesteps, features) into 2D (samples, timesteps*features).
+    """
+    if hasattr(X, 'ndim') and X.ndim == 3:
+        return X.reshape(X.shape[0], -1)
+    return X
+
+def load_and_preprocess_data():
+    """
+    Load sequences, split/filter them for Anomaly Detection (Semi-supervised).
+    
+    Returns:
+        X_train_normal: Training data (Normal only)
+        X_val_normal: Validation data (Normal only)
+        X_test: Test data (Mixed Normal + Anomalies)
+        y_test: Test labels
+        scaler: None (Data typically already scaled in pipeline)
+    """
+    from sklearn.model_selection import train_test_split
+    
+    seq_path = config.PROCESSED_DATA_DIR / 'sequences.npy'
+    label_path = config.SEQUENCE_LABELS_FILE
+    
+    if not seq_path.exists():
+        logger.error(f"Sequence data not found at {seq_path}")
+        return None, None, None, None, None
+        
+    try:
+        X = np.load(seq_path)
+        y = np.load(label_path) if label_path.exists() else np.zeros(len(X))
+        
+        # Slicing context (FAST DEBUGGING via config check)
+        max_samples = getattr(config, 'MAX_SEQUENCE_SAMPLES', None)
+        if max_samples and len(X) > max_samples:
+            indices = np.random.choice(len(X), max_samples, replace=False)
+            X = X[indices]
+            y = y[indices]
+            
+        # Split
+        X_train, X_temp, y_train, y_temp = train_test_split(
+            X, y, test_size=(1 - config.TRAIN_RATIO), random_state=config.RANDOM_SEED
+        )
+        X_val, X_test, y_val, y_test = train_test_split(
+            X_temp, y_temp, test_size=0.5, random_state=config.RANDOM_SEED
+        )
+        
+        # Filter normal for training
+        X_train_normal = X_train[y_train == 0]
+        X_val_normal = X_val[y_val == 0]
+        
+        return X_train_normal, X_val_normal, X_test, y_test, None
+        
+    except Exception as e:
+        logger.error(f"Error in load_and_preprocess_data: {e}")
+        return None, None, None, None, None
+
 logger.info("Utility functions loaded successfully")

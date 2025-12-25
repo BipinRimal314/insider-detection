@@ -5,10 +5,10 @@
 - [x] e9ba018 Task: Implement LSTM sensitivity analysis logic (variable units/dropout)
 - [x] 60c47dc Task: Implement Isolation Forest sensitivity analysis logic (variable estimators)
 - [x] f2077f9 Task: Generate visualization plots for sensitivity results
-- [~] Task: Conductor - User Manual Verification 'Hyperparameter Sensitivity Infrastructure' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Hyperparameter Sensitivity Infrastructure' (Protocol in workflow.md)
 
 ## Phase 2: Robustness & Adversarial Testing
-- [ ] Task: Implement "Boiling Frog" (Slow Evasion) attack generator in `synthetic_attacks.py`
+- [~] Task: Implement "Boiling Frog" (Slow Evasion) attack generator in `synthetic_attacks.py`
 - [ ] Task: Implement Data Perturbation simulation in `feature_engineering_polars.py`
 - [ ] Task: Create `robustness_analysis.py` to execute and report on these tests
 - [ ] Task: Conductor - User Manual Verification 'Robustness & Adversarial Testing' (Protocol in workflow.md)

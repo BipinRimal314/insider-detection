@@ -1515,3 +1515,526 @@ Evaluating model on synthetic attacks...
 2025-12-25 19:03:20 - utils - INFO -   --> AUC: 0.9059
 2025-12-25 19:03:20 - utils - INFO - Testing LSTM with units: [16], dropout: 0.1
 2025-12-25 19:03:20 - absl - WARNING - At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+2025-12-25 19:40:39 - utils - INFO - Utility functions loaded successfully
+2025-12-25 19:43:12 - utils - INFO - Utility functions loaded successfully
+2025-12-25 19:50:21 - utils - INFO - Utility functions loaded successfully
+2025-12-25 19:50:38 - utils - INFO - Utility functions loaded successfully
+2025-12-25 19:59:30 - utils - INFO - Utility functions loaded successfully
+2025-12-25 20:07:15 - utils - INFO - Utility functions loaded successfully
+2025-12-25 20:07:42 - utils - INFO - Utility functions loaded successfully
+2025-12-25 20:07:43 - utils - INFO - Starting LSTM Sensitivity Analysis...
+2025-12-25 20:07:43 - utils - INFO - Testing LSTM Config: units=[16, 8], dropout=0.0
+2025-12-25 20:07:43 - utils - INFO - LSTM sensitivity results saved to /Users/bipinrimal/Downloads/Thesis_work/results/sensitivity/lstm_sensitivity.csv
+2025-12-25 20:07:54 - utils - INFO - Utility functions loaded successfully
+2025-12-25 20:07:56 - utils - INFO - Starting LSTM Sensitivity Analysis...
+2025-12-25 20:07:56 - utils - INFO - Testing LSTM Config: units=[16, 8], dropout=0.0
+2025-12-25 20:07:56 - utils - INFO - LSTM sensitivity results saved to /Users/bipinrimal/Downloads/Thesis_work/results/sensitivity/lstm_sensitivity.csv
+2025-12-25 20:08:04 - utils - INFO - Utility functions loaded successfully
+2025-12-25 20:08:05 - utils - INFO - Starting LSTM Sensitivity Analysis...
+2025-12-25 20:08:05 - utils - INFO - Testing LSTM Config: units=[16, 8], dropout=0.0
+2025-12-25 20:08:05 - utils - INFO - LSTM sensitivity results saved to /Users/bipinrimal/Downloads/Thesis_work/results/sensitivity/lstm_sensitivity.csv
+2025-12-25 20:08:13 - utils - INFO - Utility functions loaded successfully
+2025-12-25 20:08:15 - utils - INFO - Starting LSTM Sensitivity Analysis...
+2025-12-25 20:08:15 - utils - INFO - Testing LSTM Config: units=[16, 8], dropout=0.0
+2025-12-25 20:08:15 - utils - INFO - LSTM sensitivity results saved to /Users/bipinrimal/Downloads/Thesis_work/results/sensitivity/lstm_sensitivity.csv
+2025-12-25 20:24:55 - utils - INFO - Utility functions loaded successfully
+2025-12-25 20:24:58 - utils - INFO - Starting LSTM Sensitivity Analysis...
+2025-12-25 20:24:58 - utils - INFO - Testing LSTM Config: units=[16, 8], dropout=0.0
+2025-12-25 20:24:58 - utils - INFO - LSTM sensitivity results saved to /Users/bipinrimal/Downloads/Thesis_work/results/sensitivity/lstm_sensitivity.csv
+2025-12-25 20:42:17 - utils - INFO - Utility functions loaded successfully
+2025-12-25 20:42:20 - utils - INFO - Starting LSTM Sensitivity Analysis...
+2025-12-25 20:42:20 - utils - INFO - Testing LSTM Config: units=[16, 8], dropout=0.0
+2025-12-25 20:42:20 - utils - INFO - LSTM sensitivity results saved to /Users/bipinrimal/Downloads/Thesis_work/results/sensitivity/lstm_sensitivity.csv
+2025-12-25 21:19:59 - utils - INFO - Utility functions loaded successfully
+2025-12-25 21:20:02 - utils - INFO - Starting Isolation Forest Sensitivity Analysis...
+2025-12-25 21:20:02 - utils - INFO - Testing IF Config: n_estimators=50, contamination=auto
+2025-12-25 21:20:02 - utils - INFO - Isolation Forest sensitivity results saved to /Users/bipinrimal/Downloads/Thesis_work/results/sensitivity/isolation_forest_sensitivity.csv
+2025-12-25 21:20:02 - utils - INFO - Starting LSTM Sensitivity Analysis...
+2025-12-25 21:20:02 - utils - INFO - Testing LSTM Config: units=[16, 8], dropout=0.0
+2025-12-25 21:20:02 - utils - INFO - LSTM sensitivity results saved to /Users/bipinrimal/Downloads/Thesis_work/results/sensitivity/lstm_sensitivity.csv
+2025-12-25 21:24:03 - utils - INFO - Utility functions loaded successfully
+2025-12-25 21:24:06 - utils - INFO - Starting Isolation Forest Sensitivity Analysis...
+2025-12-25 21:24:06 - utils - INFO - Testing IF Config: n_estimators=50, contamination=auto
+2025-12-25 21:24:06 - utils - INFO - Isolation Forest sensitivity results saved to /Users/bipinrimal/Downloads/Thesis_work/results/sensitivity/isolation_forest_sensitivity.csv
+2025-12-25 21:24:06 - utils - INFO - Starting LSTM Sensitivity Analysis...
+2025-12-25 21:24:06 - utils - INFO - Testing LSTM Config: units=[16, 8], dropout=0.0
+2025-12-25 21:24:06 - utils - INFO - LSTM sensitivity results saved to /Users/bipinrimal/Downloads/Thesis_work/results/sensitivity/lstm_sensitivity.csv
+2025-12-25 21:27:57 - utils - INFO - Utility functions loaded successfully
+2025-12-25 21:27:59 - utils - INFO - Generating sensitivity plots...
+2025-12-25 21:27:59 - utils - INFO - Starting Isolation Forest Sensitivity Analysis...
+2025-12-25 21:27:59 - utils - INFO - Testing IF Config: n_estimators=50, contamination=auto
+2025-12-25 21:27:59 - utils - INFO - Isolation Forest sensitivity results saved to /Users/bipinrimal/Downloads/Thesis_work/results/sensitivity/isolation_forest_sensitivity.csv
+2025-12-25 21:27:59 - utils - INFO - Starting LSTM Sensitivity Analysis...
+2025-12-25 21:27:59 - utils - INFO - Testing LSTM Config: units=[16, 8], dropout=0.0
+2025-12-25 21:27:59 - utils - INFO - LSTM sensitivity results saved to /Users/bipinrimal/Downloads/Thesis_work/results/sensitivity/lstm_sensitivity.csv
+2025-12-25 21:31:38 - utils - INFO - Utility functions loaded successfully
+2025-12-25 21:31:41 - utils - INFO - Generating sensitivity plots...
+2025-12-25 21:31:41 - utils - INFO - Sensitivity plots saved to /Users/bipinrimal/Downloads/Thesis_work/results/sensitivity/sensitivity_summary.png
+2025-12-25 21:31:41 - utils - INFO - Starting Isolation Forest Sensitivity Analysis...
+2025-12-25 21:31:41 - utils - INFO - Testing IF Config: n_estimators=50, contamination=auto
+2025-12-25 21:31:41 - utils - INFO - Isolation Forest sensitivity results saved to /Users/bipinrimal/Downloads/Thesis_work/results/sensitivity/isolation_forest_sensitivity.csv
+2025-12-25 21:31:41 - utils - INFO - Starting LSTM Sensitivity Analysis...
+2025-12-25 21:31:41 - utils - INFO - Testing LSTM Config: units=[16, 8], dropout=0.0
+2025-12-25 21:31:41 - utils - INFO - LSTM sensitivity results saved to /Users/bipinrimal/Downloads/Thesis_work/results/sensitivity/lstm_sensitivity.csv
+2025-12-25 21:32:40 - utils - INFO - Utility functions loaded successfully
+2025-12-25 21:32:43 - utils - INFO - Generating sensitivity plots...
+2025-12-25 21:32:43 - utils - INFO - Sensitivity plots saved to /Users/bipinrimal/Downloads/Thesis_work/results/sensitivity/sensitivity_summary.png
+2025-12-25 21:32:43 - utils - INFO - Starting Isolation Forest Sensitivity Analysis...
+2025-12-25 21:32:43 - utils - INFO - Testing IF Config: n_estimators=50, contamination=auto
+2025-12-25 21:32:43 - utils - INFO - Isolation Forest sensitivity results saved to /Users/bipinrimal/Downloads/Thesis_work/results/sensitivity/isolation_forest_sensitivity.csv
+2025-12-25 21:32:43 - utils - INFO - Starting LSTM Sensitivity Analysis...
+2025-12-25 21:32:43 - utils - INFO - Testing LSTM Config: units=[16, 8], dropout=0.0
+2025-12-25 21:32:43 - utils - INFO - LSTM sensitivity results saved to /Users/bipinrimal/Downloads/Thesis_work/results/sensitivity/lstm_sensitivity.csv
+2025-12-25 21:34:24 - utils - INFO - Utility functions loaded successfully
+2025-12-25 21:34:27 - utils - INFO - Hyperparameter Sensitivity Analyzer initialized.
+2025-12-25 21:34:27 - utils - INFO - Starting LSTM Sensitivity Analysis...
+2025-12-25 21:35:21 - utils - INFO - Utility functions loaded successfully
+2025-12-25 21:35:23 - utils - INFO - Hyperparameter Sensitivity Analyzer initialized.
+2025-12-25 21:35:23 - utils - INFO - Starting LSTM Sensitivity Analysis...
+2025-12-25 21:35:37 - utils - INFO - Testing LSTM Config: units=[16, 8], dropout=0.0
+2025-12-25 21:35:37 - absl - WARNING - At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+2025-12-25 21:35:37 - utils - INFO - Model: "model"
+2025-12-25 21:35:37 - utils - INFO - _________________________________________________________________
+2025-12-25 21:35:37 - utils - INFO -  Layer (type)                Output Shape              Param #   
+2025-12-25 21:35:37 - utils - INFO - =================================================================
+2025-12-25 21:35:37 - utils - INFO -  input_1 (InputLayer)        [(None, 15, 23)]          0         
+2025-12-25 21:35:37 - utils - INFO -                                                                  
+2025-12-25 21:35:37 - utils - INFO -  lstm (LSTM)                 (None, 15, 16)            2560      
+2025-12-25 21:35:37 - utils - INFO -                                                                  
+2025-12-25 21:35:37 - utils - INFO -  dropout (Dropout)           (None, 15, 16)            0         
+2025-12-25 21:35:37 - utils - INFO -                                                                  
+2025-12-25 21:35:37 - utils - INFO -  lstm_1 (LSTM)               (None, 8)                 800       
+2025-12-25 21:35:37 - utils - INFO -                                                                  
+2025-12-25 21:35:37 - utils - INFO -  repeat_vector (RepeatVecto  (None, 15, 8)             0         
+2025-12-25 21:35:37 - utils - INFO -  r)                                                              
+2025-12-25 21:35:37 - utils - INFO -                                                                  
+2025-12-25 21:35:37 - utils - INFO -  lstm_2 (LSTM)               (None, 15, 8)             544       
+2025-12-25 21:35:37 - utils - INFO -                                                                  
+2025-12-25 21:35:37 - utils - INFO -  dropout_1 (Dropout)         (None, 15, 8)             0         
+2025-12-25 21:35:37 - utils - INFO -                                                                  
+2025-12-25 21:35:37 - utils - INFO -  lstm_3 (LSTM)               (None, 15, 16)            1600      
+2025-12-25 21:35:37 - utils - INFO -                                                                  
+2025-12-25 21:35:37 - utils - INFO -  dropout_2 (Dropout)         (None, 15, 16)            0         
+2025-12-25 21:35:37 - utils - INFO -                                                                  
+2025-12-25 21:35:37 - utils - INFO -  time_distributed (TimeDist  (None, 15, 23)            391       
+2025-12-25 21:35:37 - utils - INFO -  ributed)                                                        
+2025-12-25 21:35:37 - utils - INFO -                                                                  
+2025-12-25 21:35:37 - utils - INFO - =================================================================
+2025-12-25 21:35:37 - utils - INFO - Total params: 5895 (23.03 KB)
+2025-12-25 21:35:37 - utils - INFO - Trainable params: 5895 (23.03 KB)
+2025-12-25 21:35:37 - utils - INFO - Non-trainable params: 0 (0.00 Byte)
+2025-12-25 21:35:37 - utils - INFO - _________________________________________________________________
+2025-12-25 21:35:37 - utils - INFO - Starting training with units=[16, 8], dropout=0.0
+2025-12-25 21:36:39 - utils - INFO - Utility functions loaded successfully
+2025-12-25 21:36:41 - utils - INFO - Setting Fast Mode for Verification...
+2025-12-25 21:36:41 - utils - INFO - Hyperparameter Sensitivity Analyzer initialized.
+2025-12-25 21:36:41 - utils - INFO - Starting LSTM Sensitivity Analysis...
+2025-12-25 21:36:53 - utils - INFO - Testing LSTM Config: units=[16, 8], dropout=0.0
+2025-12-25 21:36:54 - absl - WARNING - At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+2025-12-25 21:36:54 - utils - INFO - Model: "model"
+2025-12-25 21:36:54 - utils - INFO - _________________________________________________________________
+2025-12-25 21:36:54 - utils - INFO -  Layer (type)                Output Shape              Param #   
+2025-12-25 21:36:54 - utils - INFO - =================================================================
+2025-12-25 21:36:54 - utils - INFO -  input_1 (InputLayer)        [(None, 15, 23)]          0         
+2025-12-25 21:36:54 - utils - INFO -                                                                  
+2025-12-25 21:36:54 - utils - INFO -  lstm (LSTM)                 (None, 15, 16)            2560      
+2025-12-25 21:36:54 - utils - INFO -                                                                  
+2025-12-25 21:36:54 - utils - INFO -  dropout (Dropout)           (None, 15, 16)            0         
+2025-12-25 21:36:54 - utils - INFO -                                                                  
+2025-12-25 21:36:54 - utils - INFO -  lstm_1 (LSTM)               (None, 8)                 800       
+2025-12-25 21:36:54 - utils - INFO -                                                                  
+2025-12-25 21:36:54 - utils - INFO -  repeat_vector (RepeatVecto  (None, 15, 8)             0         
+2025-12-25 21:36:54 - utils - INFO -  r)                                                              
+2025-12-25 21:36:54 - utils - INFO -                                                                  
+2025-12-25 21:36:54 - utils - INFO -  lstm_2 (LSTM)               (None, 15, 8)             544       
+2025-12-25 21:36:54 - utils - INFO -                                                                  
+2025-12-25 21:36:54 - utils - INFO -  dropout_1 (Dropout)         (None, 15, 8)             0         
+2025-12-25 21:36:54 - utils - INFO -                                                                  
+2025-12-25 21:36:54 - utils - INFO -  lstm_3 (LSTM)               (None, 15, 16)            1600      
+2025-12-25 21:36:54 - utils - INFO -                                                                  
+2025-12-25 21:36:54 - utils - INFO -  dropout_2 (Dropout)         (None, 15, 16)            0         
+2025-12-25 21:36:54 - utils - INFO -                                                                  
+2025-12-25 21:36:54 - utils - INFO -  time_distributed (TimeDist  (None, 15, 23)            391       
+2025-12-25 21:36:54 - utils - INFO -  ributed)                                                        
+2025-12-25 21:36:54 - utils - INFO -                                                                  
+2025-12-25 21:36:54 - utils - INFO - =================================================================
+2025-12-25 21:36:54 - utils - INFO - Total params: 5895 (23.03 KB)
+2025-12-25 21:36:54 - utils - INFO - Trainable params: 5895 (23.03 KB)
+2025-12-25 21:36:54 - utils - INFO - Non-trainable params: 0 (0.00 Byte)
+2025-12-25 21:36:54 - utils - INFO - _________________________________________________________________
+2025-12-25 21:36:54 - utils - INFO - Starting training with units=[16, 8], dropout=0.0
+2025-12-25 21:37:41 - utils - INFO - Utility functions loaded successfully
+2025-12-25 21:37:44 - utils - INFO - Setting Fast Mode for Verification...
+2025-12-25 21:37:44 - utils - INFO - Hyperparameter Sensitivity Analyzer initialized.
+2025-12-25 21:37:44 - utils - INFO - Starting LSTM Sensitivity Analysis...
+2025-12-25 21:37:46 - utils - INFO - Testing LSTM Config: units=[16, 8], dropout=0.0
+2025-12-25 21:37:46 - absl - WARNING - At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+2025-12-25 21:37:46 - utils - INFO - Model: "model"
+2025-12-25 21:37:46 - utils - INFO - _________________________________________________________________
+2025-12-25 21:37:46 - utils - INFO -  Layer (type)                Output Shape              Param #   
+2025-12-25 21:37:46 - utils - INFO - =================================================================
+2025-12-25 21:37:46 - utils - INFO -  input_1 (InputLayer)        [(None, 15, 23)]          0         
+2025-12-25 21:37:46 - utils - INFO -                                                                  
+2025-12-25 21:37:46 - utils - INFO -  lstm (LSTM)                 (None, 15, 16)            2560      
+2025-12-25 21:37:46 - utils - INFO -                                                                  
+2025-12-25 21:37:46 - utils - INFO -  dropout (Dropout)           (None, 15, 16)            0         
+2025-12-25 21:37:46 - utils - INFO -                                                                  
+2025-12-25 21:37:46 - utils - INFO -  lstm_1 (LSTM)               (None, 8)                 800       
+2025-12-25 21:37:46 - utils - INFO -                                                                  
+2025-12-25 21:37:46 - utils - INFO -  repeat_vector (RepeatVecto  (None, 15, 8)             0         
+2025-12-25 21:37:46 - utils - INFO -  r)                                                              
+2025-12-25 21:37:46 - utils - INFO -                                                                  
+2025-12-25 21:37:46 - utils - INFO -  lstm_2 (LSTM)               (None, 15, 8)             544       
+2025-12-25 21:37:46 - utils - INFO -                                                                  
+2025-12-25 21:37:46 - utils - INFO -  dropout_1 (Dropout)         (None, 15, 8)             0         
+2025-12-25 21:37:46 - utils - INFO -                                                                  
+2025-12-25 21:37:46 - utils - INFO -  lstm_3 (LSTM)               (None, 15, 16)            1600      
+2025-12-25 21:37:46 - utils - INFO -                                                                  
+2025-12-25 21:37:46 - utils - INFO -  dropout_2 (Dropout)         (None, 15, 16)            0         
+2025-12-25 21:37:46 - utils - INFO -                                                                  
+2025-12-25 21:37:46 - utils - INFO -  time_distributed (TimeDist  (None, 15, 23)            391       
+2025-12-25 21:37:46 - utils - INFO -  ributed)                                                        
+2025-12-25 21:37:46 - utils - INFO -                                                                  
+2025-12-25 21:37:46 - utils - INFO - =================================================================
+2025-12-25 21:37:46 - utils - INFO - Total params: 5895 (23.03 KB)
+2025-12-25 21:37:46 - utils - INFO - Trainable params: 5895 (23.03 KB)
+2025-12-25 21:37:46 - utils - INFO - Non-trainable params: 0 (0.00 Byte)
+2025-12-25 21:37:46 - utils - INFO - _________________________________________________________________
+2025-12-25 21:37:46 - utils - INFO - Starting training with units=[16, 8], dropout=0.0
+2025-12-25 21:37:47 - utils - WARNING - Only one class present in y_true, cannot calculate AUC-ROC
+2025-12-25 21:37:47 - utils - ERROR - Failed config [16, 8], 0.0: 'AUC-ROC'
+2025-12-25 21:37:47 - utils - INFO - Testing LSTM Config: units=[16, 8], dropout=0.1
+2025-12-25 21:37:47 - absl - WARNING - At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+2025-12-25 21:37:47 - utils - INFO - Model: "model_1"
+2025-12-25 21:37:47 - utils - INFO - _________________________________________________________________
+2025-12-25 21:37:47 - utils - INFO -  Layer (type)                Output Shape              Param #   
+2025-12-25 21:37:47 - utils - INFO - =================================================================
+2025-12-25 21:37:47 - utils - INFO -  input_2 (InputLayer)        [(None, 15, 23)]          0         
+2025-12-25 21:37:47 - utils - INFO -                                                                  
+2025-12-25 21:37:47 - utils - INFO -  lstm_4 (LSTM)               (None, 15, 16)            2560      
+2025-12-25 21:37:47 - utils - INFO -                                                                  
+2025-12-25 21:37:47 - utils - INFO -  dropout_3 (Dropout)         (None, 15, 16)            0         
+2025-12-25 21:37:47 - utils - INFO -                                                                  
+2025-12-25 21:37:47 - utils - INFO -  lstm_5 (LSTM)               (None, 8)                 800       
+2025-12-25 21:37:47 - utils - INFO -                                                                  
+2025-12-25 21:37:47 - utils - INFO -  repeat_vector_1 (RepeatVec  (None, 15, 8)             0         
+2025-12-25 21:37:47 - utils - INFO -  tor)                                                            
+2025-12-25 21:37:47 - utils - INFO -                                                                  
+2025-12-25 21:37:47 - utils - INFO -  lstm_6 (LSTM)               (None, 15, 8)             544       
+2025-12-25 21:37:47 - utils - INFO -                                                                  
+2025-12-25 21:37:47 - utils - INFO -  dropout_4 (Dropout)         (None, 15, 8)             0         
+2025-12-25 21:37:47 - utils - INFO -                                                                  
+2025-12-25 21:37:47 - utils - INFO -  lstm_7 (LSTM)               (None, 15, 16)            1600      
+2025-12-25 21:37:47 - utils - INFO -                                                                  
+2025-12-25 21:37:47 - utils - INFO -  dropout_5 (Dropout)         (None, 15, 16)            0         
+2025-12-25 21:37:47 - utils - INFO -                                                                  
+2025-12-25 21:37:47 - utils - INFO -  time_distributed_1 (TimeDi  (None, 15, 23)            391       
+2025-12-25 21:37:47 - utils - INFO -  stributed)                                                      
+2025-12-25 21:37:47 - utils - INFO -                                                                  
+2025-12-25 21:37:47 - utils - INFO - =================================================================
+2025-12-25 21:37:47 - utils - INFO - Total params: 5895 (23.03 KB)
+2025-12-25 21:37:47 - utils - INFO - Trainable params: 5895 (23.03 KB)
+2025-12-25 21:37:47 - utils - INFO - Non-trainable params: 0 (0.00 Byte)
+2025-12-25 21:37:47 - utils - INFO - _________________________________________________________________
+2025-12-25 21:37:47 - utils - INFO - Starting training with units=[16, 8], dropout=0.1
+2025-12-25 21:37:49 - utils - WARNING - Only one class present in y_true, cannot calculate AUC-ROC
+2025-12-25 21:37:49 - utils - ERROR - Failed config [16, 8], 0.1: 'AUC-ROC'
+2025-12-25 21:37:49 - utils - INFO - Testing LSTM Config: units=[16, 8], dropout=0.2
+2025-12-25 21:37:49 - absl - WARNING - At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+2025-12-25 21:37:49 - utils - INFO - Model: "model_2"
+2025-12-25 21:37:49 - utils - INFO - _________________________________________________________________
+2025-12-25 21:37:49 - utils - INFO -  Layer (type)                Output Shape              Param #   
+2025-12-25 21:37:49 - utils - INFO - =================================================================
+2025-12-25 21:37:49 - utils - INFO -  input_3 (InputLayer)        [(None, 15, 23)]          0         
+2025-12-25 21:37:49 - utils - INFO -                                                                  
+2025-12-25 21:37:49 - utils - INFO -  lstm_8 (LSTM)               (None, 15, 16)            2560      
+2025-12-25 21:37:49 - utils - INFO -                                                                  
+2025-12-25 21:37:49 - utils - INFO -  dropout_6 (Dropout)         (None, 15, 16)            0         
+2025-12-25 21:37:49 - utils - INFO -                                                                  
+2025-12-25 21:37:49 - utils - INFO -  lstm_9 (LSTM)               (None, 8)                 800       
+2025-12-25 21:37:49 - utils - INFO -                                                                  
+2025-12-25 21:37:49 - utils - INFO -  repeat_vector_2 (RepeatVec  (None, 15, 8)             0         
+2025-12-25 21:37:49 - utils - INFO -  tor)                                                            
+2025-12-25 21:37:49 - utils - INFO -                                                                  
+2025-12-25 21:37:49 - utils - INFO -  lstm_10 (LSTM)              (None, 15, 8)             544       
+2025-12-25 21:37:49 - utils - INFO -                                                                  
+2025-12-25 21:37:49 - utils - INFO -  dropout_7 (Dropout)         (None, 15, 8)             0         
+2025-12-25 21:37:49 - utils - INFO -                                                                  
+2025-12-25 21:37:49 - utils - INFO -  lstm_11 (LSTM)              (None, 15, 16)            1600      
+2025-12-25 21:37:49 - utils - INFO -                                                                  
+2025-12-25 21:37:49 - utils - INFO -  dropout_8 (Dropout)         (None, 15, 16)            0         
+2025-12-25 21:37:49 - utils - INFO -                                                                  
+2025-12-25 21:37:49 - utils - INFO -  time_distributed_2 (TimeDi  (None, 15, 23)            391       
+2025-12-25 21:37:49 - utils - INFO -  stributed)                                                      
+2025-12-25 21:37:49 - utils - INFO -                                                                  
+2025-12-25 21:37:49 - utils - INFO - =================================================================
+2025-12-25 21:37:49 - utils - INFO - Total params: 5895 (23.03 KB)
+2025-12-25 21:37:49 - utils - INFO - Trainable params: 5895 (23.03 KB)
+2025-12-25 21:37:49 - utils - INFO - Non-trainable params: 0 (0.00 Byte)
+2025-12-25 21:37:49 - utils - INFO - _________________________________________________________________
+2025-12-25 21:37:49 - utils - INFO - Starting training with units=[16, 8], dropout=0.2
+2025-12-25 21:37:50 - utils - WARNING - Only one class present in y_true, cannot calculate AUC-ROC
+2025-12-25 21:37:50 - utils - ERROR - Failed config [16, 8], 0.2: 'AUC-ROC'
+2025-12-25 21:37:50 - utils - INFO - Testing LSTM Config: units=[32, 16], dropout=0.0
+2025-12-25 21:37:50 - absl - WARNING - At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+2025-12-25 21:37:50 - utils - INFO - Model: "model_3"
+2025-12-25 21:37:50 - utils - INFO - _________________________________________________________________
+2025-12-25 21:37:50 - utils - INFO -  Layer (type)                Output Shape              Param #   
+2025-12-25 21:37:50 - utils - INFO - =================================================================
+2025-12-25 21:37:50 - utils - INFO -  input_4 (InputLayer)        [(None, 15, 23)]          0         
+2025-12-25 21:37:50 - utils - INFO -                                                                  
+2025-12-25 21:37:50 - utils - INFO -  lstm_12 (LSTM)              (None, 15, 32)            7168      
+2025-12-25 21:37:50 - utils - INFO -                                                                  
+2025-12-25 21:37:50 - utils - INFO -  dropout_9 (Dropout)         (None, 15, 32)            0         
+2025-12-25 21:37:50 - utils - INFO -                                                                  
+2025-12-25 21:37:50 - utils - INFO -  lstm_13 (LSTM)              (None, 16)                3136      
+2025-12-25 21:37:50 - utils - INFO -                                                                  
+2025-12-25 21:37:50 - utils - INFO -  repeat_vector_3 (RepeatVec  (None, 15, 16)            0         
+2025-12-25 21:37:50 - utils - INFO -  tor)                                                            
+2025-12-25 21:37:50 - utils - INFO -                                                                  
+2025-12-25 21:37:50 - utils - INFO -  lstm_14 (LSTM)              (None, 15, 16)            2112      
+2025-12-25 21:37:50 - utils - INFO -                                                                  
+2025-12-25 21:37:50 - utils - INFO -  dropout_10 (Dropout)        (None, 15, 16)            0         
+2025-12-25 21:37:50 - utils - INFO -                                                                  
+2025-12-25 21:37:50 - utils - INFO -  lstm_15 (LSTM)              (None, 15, 32)            6272      
+2025-12-25 21:37:50 - utils - INFO -                                                                  
+2025-12-25 21:37:50 - utils - INFO -  dropout_11 (Dropout)        (None, 15, 32)            0         
+2025-12-25 21:37:50 - utils - INFO -                                                                  
+2025-12-25 21:37:50 - utils - INFO -  time_distributed_3 (TimeDi  (None, 15, 23)            759       
+2025-12-25 21:37:50 - utils - INFO -  stributed)                                                      
+2025-12-25 21:37:50 - utils - INFO -                                                                  
+2025-12-25 21:37:50 - utils - INFO - =================================================================
+2025-12-25 21:37:50 - utils - INFO - Total params: 19447 (75.96 KB)
+2025-12-25 21:37:50 - utils - INFO - Trainable params: 19447 (75.96 KB)
+2025-12-25 21:37:50 - utils - INFO - Non-trainable params: 0 (0.00 Byte)
+2025-12-25 21:37:50 - utils - INFO - _________________________________________________________________
+2025-12-25 21:37:50 - utils - INFO - Starting training with units=[32, 16], dropout=0.0
+2025-12-25 21:37:52 - utils - WARNING - Only one class present in y_true, cannot calculate AUC-ROC
+2025-12-25 21:37:52 - utils - ERROR - Failed config [32, 16], 0.0: 'AUC-ROC'
+2025-12-25 21:37:52 - utils - INFO - Testing LSTM Config: units=[32, 16], dropout=0.1
+2025-12-25 21:37:52 - absl - WARNING - At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+2025-12-25 21:37:52 - utils - INFO - Model: "model_4"
+2025-12-25 21:37:52 - utils - INFO - _________________________________________________________________
+2025-12-25 21:37:52 - utils - INFO -  Layer (type)                Output Shape              Param #   
+2025-12-25 21:37:52 - utils - INFO - =================================================================
+2025-12-25 21:37:52 - utils - INFO -  input_5 (InputLayer)        [(None, 15, 23)]          0         
+2025-12-25 21:37:52 - utils - INFO -                                                                  
+2025-12-25 21:37:52 - utils - INFO -  lstm_16 (LSTM)              (None, 15, 32)            7168      
+2025-12-25 21:37:52 - utils - INFO -                                                                  
+2025-12-25 21:37:52 - utils - INFO -  dropout_12 (Dropout)        (None, 15, 32)            0         
+2025-12-25 21:37:52 - utils - INFO -                                                                  
+2025-12-25 21:37:52 - utils - INFO -  lstm_17 (LSTM)              (None, 16)                3136      
+2025-12-25 21:37:52 - utils - INFO -                                                                  
+2025-12-25 21:37:52 - utils - INFO -  repeat_vector_4 (RepeatVec  (None, 15, 16)            0         
+2025-12-25 21:37:52 - utils - INFO -  tor)                                                            
+2025-12-25 21:37:52 - utils - INFO -                                                                  
+2025-12-25 21:37:52 - utils - INFO -  lstm_18 (LSTM)              (None, 15, 16)            2112      
+2025-12-25 21:37:52 - utils - INFO -                                                                  
+2025-12-25 21:37:52 - utils - INFO -  dropout_13 (Dropout)        (None, 15, 16)            0         
+2025-12-25 21:37:52 - utils - INFO -                                                                  
+2025-12-25 21:37:52 - utils - INFO -  lstm_19 (LSTM)              (None, 15, 32)            6272      
+2025-12-25 21:37:52 - utils - INFO -                                                                  
+2025-12-25 21:37:52 - utils - INFO -  dropout_14 (Dropout)        (None, 15, 32)            0         
+2025-12-25 21:37:52 - utils - INFO -                                                                  
+2025-12-25 21:37:52 - utils - INFO -  time_distributed_4 (TimeDi  (None, 15, 23)            759       
+2025-12-25 21:37:52 - utils - INFO -  stributed)                                                      
+2025-12-25 21:37:52 - utils - INFO -                                                                  
+2025-12-25 21:37:52 - utils - INFO - =================================================================
+2025-12-25 21:37:52 - utils - INFO - Total params: 19447 (75.96 KB)
+2025-12-25 21:37:52 - utils - INFO - Trainable params: 19447 (75.96 KB)
+2025-12-25 21:37:52 - utils - INFO - Non-trainable params: 0 (0.00 Byte)
+2025-12-25 21:37:52 - utils - INFO - _________________________________________________________________
+2025-12-25 21:37:52 - utils - INFO - Starting training with units=[32, 16], dropout=0.1
+2025-12-25 21:37:53 - tensorflow - WARNING - 5 out of the last 13 calls to <function Model.make_train_function.<locals>.train_function at 0x14ef079c0> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings could be due to (1) creating @tf.function repeatedly in a loop, (2) passing tensors with different shapes, (3) passing Python objects instead of tensors. For (1), please define your @tf.function outside of the loop. For (2), @tf.function has reduce_retracing=True option that can avoid unnecessary retracing. For (3), please refer to https://www.tensorflow.org/guide/function#controlling_retracing and https://www.tensorflow.org/api_docs/python/tf/function for  more details.
+2025-12-25 21:37:53 - tensorflow - WARNING - 5 out of the last 5 calls to <function Model.make_test_function.<locals>.test_function at 0x14f650a40> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings could be due to (1) creating @tf.function repeatedly in a loop, (2) passing tensors with different shapes, (3) passing Python objects instead of tensors. For (1), please define your @tf.function outside of the loop. For (2), @tf.function has reduce_retracing=True option that can avoid unnecessary retracing. For (3), please refer to https://www.tensorflow.org/guide/function#controlling_retracing and https://www.tensorflow.org/api_docs/python/tf/function for  more details.
+2025-12-25 21:37:53 - utils - WARNING - Only one class present in y_true, cannot calculate AUC-ROC
+2025-12-25 21:37:53 - utils - ERROR - Failed config [32, 16], 0.1: 'AUC-ROC'
+2025-12-25 21:37:53 - utils - INFO - Testing LSTM Config: units=[32, 16], dropout=0.2
+2025-12-25 21:37:53 - absl - WARNING - At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+2025-12-25 21:37:53 - utils - INFO - Model: "model_5"
+2025-12-25 21:37:53 - utils - INFO - _________________________________________________________________
+2025-12-25 21:37:53 - utils - INFO -  Layer (type)                Output Shape              Param #   
+2025-12-25 21:37:53 - utils - INFO - =================================================================
+2025-12-25 21:37:53 - utils - INFO -  input_6 (InputLayer)        [(None, 15, 23)]          0         
+2025-12-25 21:37:53 - utils - INFO -                                                                  
+2025-12-25 21:37:53 - utils - INFO -  lstm_20 (LSTM)              (None, 15, 32)            7168      
+2025-12-25 21:37:53 - utils - INFO -                                                                  
+2025-12-25 21:37:53 - utils - INFO -  dropout_15 (Dropout)        (None, 15, 32)            0         
+2025-12-25 21:37:53 - utils - INFO -                                                                  
+2025-12-25 21:37:53 - utils - INFO -  lstm_21 (LSTM)              (None, 16)                3136      
+2025-12-25 21:37:53 - utils - INFO -                                                                  
+2025-12-25 21:37:53 - utils - INFO -  repeat_vector_5 (RepeatVec  (None, 15, 16)            0         
+2025-12-25 21:37:53 - utils - INFO -  tor)                                                            
+2025-12-25 21:37:53 - utils - INFO -                                                                  
+2025-12-25 21:37:53 - utils - INFO -  lstm_22 (LSTM)              (None, 15, 16)            2112      
+2025-12-25 21:37:53 - utils - INFO -                                                                  
+2025-12-25 21:37:53 - utils - INFO -  dropout_16 (Dropout)        (None, 15, 16)            0         
+2025-12-25 21:37:53 - utils - INFO -                                                                  
+2025-12-25 21:37:53 - utils - INFO -  lstm_23 (LSTM)              (None, 15, 32)            6272      
+2025-12-25 21:37:53 - utils - INFO -                                                                  
+2025-12-25 21:37:53 - utils - INFO -  dropout_17 (Dropout)        (None, 15, 32)            0         
+2025-12-25 21:37:53 - utils - INFO -                                                                  
+2025-12-25 21:37:53 - utils - INFO -  time_distributed_5 (TimeDi  (None, 15, 23)            759       
+2025-12-25 21:37:53 - utils - INFO -  stributed)                                                      
+2025-12-25 21:37:53 - utils - INFO -                                                                  
+2025-12-25 21:37:53 - utils - INFO - =================================================================
+2025-12-25 21:37:53 - utils - INFO - Total params: 19447 (75.96 KB)
+2025-12-25 21:37:53 - utils - INFO - Trainable params: 19447 (75.96 KB)
+2025-12-25 21:37:53 - utils - INFO - Non-trainable params: 0 (0.00 Byte)
+2025-12-25 21:37:53 - utils - INFO - _________________________________________________________________
+2025-12-25 21:37:53 - utils - INFO - Starting training with units=[32, 16], dropout=0.2
+2025-12-25 21:37:54 - tensorflow - WARNING - 5 out of the last 13 calls to <function Model.make_train_function.<locals>.train_function at 0x14f83fc40> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings could be due to (1) creating @tf.function repeatedly in a loop, (2) passing tensors with different shapes, (3) passing Python objects instead of tensors. For (1), please define your @tf.function outside of the loop. For (2), @tf.function has reduce_retracing=True option that can avoid unnecessary retracing. For (3), please refer to https://www.tensorflow.org/guide/function#controlling_retracing and https://www.tensorflow.org/api_docs/python/tf/function for  more details.
+2025-12-25 21:37:55 - tensorflow - WARNING - 6 out of the last 6 calls to <function Model.make_test_function.<locals>.test_function at 0x14de7fec0> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings could be due to (1) creating @tf.function repeatedly in a loop, (2) passing tensors with different shapes, (3) passing Python objects instead of tensors. For (1), please define your @tf.function outside of the loop. For (2), @tf.function has reduce_retracing=True option that can avoid unnecessary retracing. For (3), please refer to https://www.tensorflow.org/guide/function#controlling_retracing and https://www.tensorflow.org/api_docs/python/tf/function for  more details.
+2025-12-25 21:37:55 - utils - WARNING - Only one class present in y_true, cannot calculate AUC-ROC
+2025-12-25 21:37:55 - utils - ERROR - Failed config [32, 16], 0.2: 'AUC-ROC'
+2025-12-25 21:37:55 - utils - INFO - Testing LSTM Config: units=[64, 32], dropout=0.0
+2025-12-25 21:37:55 - absl - WARNING - At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+2025-12-25 21:37:55 - utils - INFO - Model: "model_6"
+2025-12-25 21:37:55 - utils - INFO - _________________________________________________________________
+2025-12-25 21:37:55 - utils - INFO -  Layer (type)                Output Shape              Param #   
+2025-12-25 21:37:55 - utils - INFO - =================================================================
+2025-12-25 21:37:55 - utils - INFO -  input_7 (InputLayer)        [(None, 15, 23)]          0         
+2025-12-25 21:37:55 - utils - INFO -                                                                  
+2025-12-25 21:37:55 - utils - INFO -  lstm_24 (LSTM)              (None, 15, 64)            22528     
+2025-12-25 21:37:55 - utils - INFO -                                                                  
+2025-12-25 21:37:55 - utils - INFO -  dropout_18 (Dropout)        (None, 15, 64)            0         
+2025-12-25 21:37:55 - utils - INFO -                                                                  
+2025-12-25 21:37:55 - utils - INFO -  lstm_25 (LSTM)              (None, 32)                12416     
+2025-12-25 21:37:55 - utils - INFO -                                                                  
+2025-12-25 21:37:55 - utils - INFO -  repeat_vector_6 (RepeatVec  (None, 15, 32)            0         
+2025-12-25 21:37:55 - utils - INFO -  tor)                                                            
+2025-12-25 21:37:55 - utils - INFO -                                                                  
+2025-12-25 21:37:55 - utils - INFO -  lstm_26 (LSTM)              (None, 15, 32)            8320      
+2025-12-25 21:37:55 - utils - INFO -                                                                  
+2025-12-25 21:37:55 - utils - INFO -  dropout_19 (Dropout)        (None, 15, 32)            0         
+2025-12-25 21:37:55 - utils - INFO -                                                                  
+2025-12-25 21:37:55 - utils - INFO -  lstm_27 (LSTM)              (None, 15, 64)            24832     
+2025-12-25 21:37:55 - utils - INFO -                                                                  
+2025-12-25 21:37:55 - utils - INFO -  dropout_20 (Dropout)        (None, 15, 64)            0         
+2025-12-25 21:37:55 - utils - INFO -                                                                  
+2025-12-25 21:37:55 - utils - INFO -  time_distributed_6 (TimeDi  (None, 15, 23)            1495      
+2025-12-25 21:37:55 - utils - INFO -  stributed)                                                      
+2025-12-25 21:37:55 - utils - INFO -                                                                  
+2025-12-25 21:37:55 - utils - INFO - =================================================================
+2025-12-25 21:37:55 - utils - INFO - Total params: 69591 (271.84 KB)
+2025-12-25 21:37:55 - utils - INFO - Trainable params: 69591 (271.84 KB)
+2025-12-25 21:37:55 - utils - INFO - Non-trainable params: 0 (0.00 Byte)
+2025-12-25 21:37:55 - utils - INFO - _________________________________________________________________
+2025-12-25 21:37:55 - utils - INFO - Starting training with units=[64, 32], dropout=0.0
+2025-12-25 21:37:56 - utils - WARNING - Only one class present in y_true, cannot calculate AUC-ROC
+2025-12-25 21:37:56 - utils - ERROR - Failed config [64, 32], 0.0: 'AUC-ROC'
+2025-12-25 21:37:56 - utils - INFO - Testing LSTM Config: units=[64, 32], dropout=0.1
+2025-12-25 21:37:56 - absl - WARNING - At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+2025-12-25 21:37:56 - utils - INFO - Model: "model_7"
+2025-12-25 21:37:56 - utils - INFO - _________________________________________________________________
+2025-12-25 21:37:56 - utils - INFO -  Layer (type)                Output Shape              Param #   
+2025-12-25 21:37:56 - utils - INFO - =================================================================
+2025-12-25 21:37:56 - utils - INFO -  input_8 (InputLayer)        [(None, 15, 23)]          0         
+2025-12-25 21:37:56 - utils - INFO -                                                                  
+2025-12-25 21:37:56 - utils - INFO -  lstm_28 (LSTM)              (None, 15, 64)            22528     
+2025-12-25 21:37:56 - utils - INFO -                                                                  
+2025-12-25 21:37:56 - utils - INFO -  dropout_21 (Dropout)        (None, 15, 64)            0         
+2025-12-25 21:37:56 - utils - INFO -                                                                  
+2025-12-25 21:37:56 - utils - INFO -  lstm_29 (LSTM)              (None, 32)                12416     
+2025-12-25 21:37:56 - utils - INFO -                                                                  
+2025-12-25 21:37:56 - utils - INFO -  repeat_vector_7 (RepeatVec  (None, 15, 32)            0         
+2025-12-25 21:37:56 - utils - INFO -  tor)                                                            
+2025-12-25 21:37:56 - utils - INFO -                                                                  
+2025-12-25 21:37:56 - utils - INFO -  lstm_30 (LSTM)              (None, 15, 32)            8320      
+2025-12-25 21:37:56 - utils - INFO -                                                                  
+2025-12-25 21:37:56 - utils - INFO -  dropout_22 (Dropout)        (None, 15, 32)            0         
+2025-12-25 21:37:56 - utils - INFO -                                                                  
+2025-12-25 21:37:56 - utils - INFO -  lstm_31 (LSTM)              (None, 15, 64)            24832     
+2025-12-25 21:37:56 - utils - INFO -                                                                  
+2025-12-25 21:37:56 - utils - INFO -  dropout_23 (Dropout)        (None, 15, 64)            0         
+2025-12-25 21:37:56 - utils - INFO -                                                                  
+2025-12-25 21:37:56 - utils - INFO -  time_distributed_7 (TimeDi  (None, 15, 23)            1495      
+2025-12-25 21:37:56 - utils - INFO -  stributed)                                                      
+2025-12-25 21:37:56 - utils - INFO -                                                                  
+2025-12-25 21:37:56 - utils - INFO - =================================================================
+2025-12-25 21:37:56 - utils - INFO - Total params: 69591 (271.84 KB)
+2025-12-25 21:37:56 - utils - INFO - Trainable params: 69591 (271.84 KB)
+2025-12-25 21:37:56 - utils - INFO - Non-trainable params: 0 (0.00 Byte)
+2025-12-25 21:37:56 - utils - INFO - _________________________________________________________________
+2025-12-25 21:37:56 - utils - INFO - Starting training with units=[64, 32], dropout=0.1
+2025-12-25 21:37:58 - utils - WARNING - Only one class present in y_true, cannot calculate AUC-ROC
+2025-12-25 21:37:58 - utils - ERROR - Failed config [64, 32], 0.1: 'AUC-ROC'
+2025-12-25 21:37:58 - utils - INFO - Testing LSTM Config: units=[64, 32], dropout=0.2
+2025-12-25 21:37:58 - absl - WARNING - At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+2025-12-25 21:37:58 - utils - INFO - Model: "model_8"
+2025-12-25 21:37:58 - utils - INFO - _________________________________________________________________
+2025-12-25 21:37:58 - utils - INFO -  Layer (type)                Output Shape              Param #   
+2025-12-25 21:37:58 - utils - INFO - =================================================================
+2025-12-25 21:37:58 - utils - INFO -  input_9 (InputLayer)        [(None, 15, 23)]          0         
+2025-12-25 21:37:58 - utils - INFO -                                                                  
+2025-12-25 21:37:58 - utils - INFO -  lstm_32 (LSTM)              (None, 15, 64)            22528     
+2025-12-25 21:37:58 - utils - INFO -                                                                  
+2025-12-25 21:37:58 - utils - INFO -  dropout_24 (Dropout)        (None, 15, 64)            0         
+2025-12-25 21:37:58 - utils - INFO -                                                                  
+2025-12-25 21:37:58 - utils - INFO -  lstm_33 (LSTM)              (None, 32)                12416     
+2025-12-25 21:37:58 - utils - INFO -                                                                  
+2025-12-25 21:37:58 - utils - INFO -  repeat_vector_8 (RepeatVec  (None, 15, 32)            0         
+2025-12-25 21:37:58 - utils - INFO -  tor)                                                            
+2025-12-25 21:37:58 - utils - INFO -                                                                  
+2025-12-25 21:37:58 - utils - INFO -  lstm_34 (LSTM)              (None, 15, 32)            8320      
+2025-12-25 21:37:58 - utils - INFO -                                                                  
+2025-12-25 21:37:58 - utils - INFO -  dropout_25 (Dropout)        (None, 15, 32)            0         
+2025-12-25 21:37:58 - utils - INFO -                                                                  
+2025-12-25 21:37:58 - utils - INFO -  lstm_35 (LSTM)              (None, 15, 64)            24832     
+2025-12-25 21:37:58 - utils - INFO -                                                                  
+2025-12-25 21:37:58 - utils - INFO -  dropout_26 (Dropout)        (None, 15, 64)            0         
+2025-12-25 21:37:58 - utils - INFO -                                                                  
+2025-12-25 21:37:58 - utils - INFO -  time_distributed_8 (TimeDi  (None, 15, 23)            1495      
+2025-12-25 21:37:58 - utils - INFO -  stributed)                                                      
+2025-12-25 21:37:58 - utils - INFO -                                                                  
+2025-12-25 21:37:58 - utils - INFO - =================================================================
+2025-12-25 21:37:58 - utils - INFO - Total params: 69591 (271.84 KB)
+2025-12-25 21:37:58 - utils - INFO - Trainable params: 69591 (271.84 KB)
+2025-12-25 21:37:58 - utils - INFO - Non-trainable params: 0 (0.00 Byte)
+2025-12-25 21:37:58 - utils - INFO - _________________________________________________________________
+2025-12-25 21:37:58 - utils - INFO - Starting training with units=[64, 32], dropout=0.2
+2025-12-25 21:37:59 - utils - WARNING - Only one class present in y_true, cannot calculate AUC-ROC
+2025-12-25 21:37:59 - utils - ERROR - Failed config [64, 32], 0.2: 'AUC-ROC'
+2025-12-25 21:37:59 - utils - INFO - LSTM sensitivity results saved to /Users/bipinrimal/Downloads/Thesis_work/results/sensitivity/lstm_sensitivity.csv
+2025-12-25 21:37:59 - utils - INFO - Starting Isolation Forest Sensitivity Analysis...
+2025-12-25 21:38:01 - utils - INFO - Testing IF Config: n_estimators=50, contamination=auto
+2025-12-25 21:38:01 - utils - INFO - Training Isolation Forest with params: n_estimators=50, contamination=auto
+2025-12-25 21:38:01 - utils - WARNING - Only one class present in y_true, cannot calculate AUC-ROC
+2025-12-25 21:38:01 - utils - ERROR - Failed IF config 50, auto: 'AUC-ROC'
+2025-12-25 21:38:01 - utils - INFO - Testing IF Config: n_estimators=50, contamination=0.01
+2025-12-25 21:38:01 - utils - INFO - Training Isolation Forest with params: n_estimators=50, contamination=0.01
+2025-12-25 21:38:01 - utils - WARNING - Only one class present in y_true, cannot calculate AUC-ROC
+2025-12-25 21:38:01 - utils - ERROR - Failed IF config 50, 0.01: 'AUC-ROC'
+2025-12-25 21:38:01 - utils - INFO - Testing IF Config: n_estimators=50, contamination=0.05
+2025-12-25 21:38:01 - utils - INFO - Training Isolation Forest with params: n_estimators=50, contamination=0.05
+2025-12-25 21:38:01 - utils - WARNING - Only one class present in y_true, cannot calculate AUC-ROC
+2025-12-25 21:38:01 - utils - ERROR - Failed IF config 50, 0.05: 'AUC-ROC'
+2025-12-25 21:38:01 - utils - INFO - Testing IF Config: n_estimators=100, contamination=auto
+2025-12-25 21:38:01 - utils - INFO - Training Isolation Forest with params: n_estimators=100, contamination=auto
+2025-12-25 21:38:01 - utils - WARNING - Only one class present in y_true, cannot calculate AUC-ROC
+2025-12-25 21:38:01 - utils - ERROR - Failed IF config 100, auto: 'AUC-ROC'
+2025-12-25 21:38:01 - utils - INFO - Testing IF Config: n_estimators=100, contamination=0.01
+2025-12-25 21:38:01 - utils - INFO - Training Isolation Forest with params: n_estimators=100, contamination=0.01
+2025-12-25 21:38:01 - utils - WARNING - Only one class present in y_true, cannot calculate AUC-ROC
+2025-12-25 21:38:01 - utils - ERROR - Failed IF config 100, 0.01: 'AUC-ROC'
+2025-12-25 21:38:01 - utils - INFO - Testing IF Config: n_estimators=100, contamination=0.05
+2025-12-25 21:38:01 - utils - INFO - Training Isolation Forest with params: n_estimators=100, contamination=0.05
+2025-12-25 21:38:01 - utils - WARNING - Only one class present in y_true, cannot calculate AUC-ROC
+2025-12-25 21:38:01 - utils - ERROR - Failed IF config 100, 0.05: 'AUC-ROC'
+2025-12-25 21:38:01 - utils - INFO - Testing IF Config: n_estimators=200, contamination=auto
+2025-12-25 21:38:01 - utils - INFO - Training Isolation Forest with params: n_estimators=200, contamination=auto
+2025-12-25 21:38:02 - utils - WARNING - Only one class present in y_true, cannot calculate AUC-ROC
+2025-12-25 21:38:02 - utils - ERROR - Failed IF config 200, auto: 'AUC-ROC'
+2025-12-25 21:38:02 - utils - INFO - Testing IF Config: n_estimators=200, contamination=0.01
+2025-12-25 21:38:02 - utils - INFO - Training Isolation Forest with params: n_estimators=200, contamination=0.01
+2025-12-25 21:38:02 - utils - WARNING - Only one class present in y_true, cannot calculate AUC-ROC
+2025-12-25 21:38:02 - utils - WARNING - Could not compute confusion matrix
+2025-12-25 21:38:02 - utils - ERROR - Failed IF config 200, 0.01: 'AUC-ROC'
+2025-12-25 21:38:02 - utils - INFO - Testing IF Config: n_estimators=200, contamination=0.05
+2025-12-25 21:38:02 - utils - INFO - Training Isolation Forest with params: n_estimators=200, contamination=0.05
+2025-12-25 21:38:02 - utils - WARNING - Only one class present in y_true, cannot calculate AUC-ROC
+2025-12-25 21:38:02 - utils - ERROR - Failed IF config 200, 0.05: 'AUC-ROC'
+2025-12-25 21:38:02 - utils - INFO - Isolation Forest sensitivity results saved to /Users/bipinrimal/Downloads/Thesis_work/results/sensitivity/isolation_forest_sensitivity.csv
+2025-12-25 21:38:02 - utils - INFO - Generating sensitivity plots...
+2025-12-25 21:38:02 - utils - INFO - Sensitivity plots saved to /Users/bipinrimal/Downloads/Thesis_work/results/sensitivity/sensitivity_summary.png
+2025-12-25 21:38:02 - utils - INFO - Sensitivity Analysis Complete.
