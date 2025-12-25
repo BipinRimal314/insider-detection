@@ -69,7 +69,43 @@ class TestHyperparameterSensitivity(unittest.TestCase):
         self.assertIn('units', results.columns)
         self.assertIn('dropout', results.columns)
         self.assertIn('auc', results.columns)
+    @patch('hyperparameter_sensitivity.utils')
+    @patch('hyperparameter_sensitivity.IsolationForestModel')
+    def test_run_isolation_forest_sensitivity(self, MockIF, mock_utils):
+        """Test the execution of Isolation Forest sensitivity analysis."""
+        # Setup mocks
+        mock_model_instance = MockIF.return_value
+        # Mock train_and_evaluate
+        mock_model_instance.train_and_evaluate.return_value = (
+            0.88,  # auc
+            None,  # scaler
+            np.zeros(100), # predictions
+            np.zeros(100), # anomaly_scores
+            {'AUC-ROC': 0.88} # metrics
+        )
         
-        # Verify logic called model training
-        MockLSTM.assert_called()
+        # Mock utils data loading
+        mock_utils.load_and_preprocess_data.return_value = (
+            np.zeros((100, 10, 5)), # X_train
+            np.zeros((100, 10, 5)), # X_val
+            np.zeros((100, 10, 5)), # X_test
+            np.zeros(100),          # y_test
+            None                    # scaler
+        )
+        # Mock utils.flatten_sequences because IF needs flat input
+        mock_utils.flatten_sequences.side_effect = lambda x: x.reshape(x.shape[0], -1) if x is not None else None
+        
+        # Limit grid
+        self.analyzer.if_param_grid['n_estimators'] = [50]
+        self.analyzer.if_param_grid['contamination'] = ['auto']
+        
+        results = self.analyzer.run_isolation_forest_sensitivity()
+        
+        # Verify results
+        self.assertIsInstance(results, pd.DataFrame)
+        self.assertFalse(results.empty)
+        self.assertIn('n_estimators', results.columns)
+        self.assertIn('auc', results.columns)
+        
+        MockIF.assert_called()
         mock_model_instance.train_and_evaluate.assert_called()

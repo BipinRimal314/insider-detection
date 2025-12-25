@@ -12,6 +12,75 @@ import utils
 
 logger = utils.logger
 
+class IsolationForestModel:
+    """
+    Isolation Forest wrapper for standardized training and evaluation.
+    Supports dependency injection for hyperparameter tuning.
+    """
+    
+    def __init__(self, n_estimators=None, contamination=None, max_samples=None, random_state=None):
+        self.config = config.ISOLATION_FOREST.copy()
+        # Override defaults if provided
+        if n_estimators is not None: self.config['n_estimators'] = n_estimators
+        if contamination is not None: self.config['contamination'] = contamination
+        if max_samples is not None: self.config['max_samples'] = max_samples
+        if random_state is not None: self.config['random_state'] = random_state
+        
+        self.model = None
+
+    def train_and_evaluate(self, X_train, X_val, X_test, y_test, scaler=None):
+        """
+        Train the model and evaluate on test set.
+        Args:
+            X_train: Training data (usually flattened)
+            X_val: Validation data (unused for IF but kept for API consistency)
+            X_test: Test data
+            y_test: Test labels
+            scaler: Optional scaler (unused)
+            
+        Returns:
+            history (None), auc, threshold, predictions, metrics
+        """
+        # Ensure input is 2D (flatten if 3D sequences passed by mistake)
+        if len(X_train.shape) > 2:
+            X_train = X_train.reshape(X_train.shape[0], -1)
+        if len(X_test.shape) > 2:
+            X_test = X_test.reshape(X_test.shape[0], -1)
+            
+        self.model = IsolationForest(
+            n_estimators=self.config['n_estimators'],
+            max_samples=self.config['max_samples'],
+            contamination=self.config['contamination'],
+            max_features=self.config['max_features'],
+            bootstrap=self.config['bootstrap'],
+            n_jobs=self.config['n_jobs'],
+            random_state=self.config['random_state'],
+            verbose=self.config['verbose']
+        )
+        
+        logger.info(f"Training Isolation Forest with params: n_estimators={self.config['n_estimators']}, contamination={self.config['contamination']}")
+        
+        # Train
+        self.model.fit(X_train)
+        
+        # Predict / Score
+        # decision_function: lower is more anomalous. We invert.
+        raw_scores = self.model.decision_function(X_test)
+        anomaly_scores = -raw_scores
+        
+        # Calculate threshold (e.g., 95th percentile) or use model's prediction
+        # predict() returns -1 for outlier, 1 for inlier
+        preds_sk = self.model.predict(X_test)
+        predictions = np.where(preds_sk == -1, 1, 0)
+        
+        # Calculate simple threshold from scores for reporting
+        threshold = np.percentile(anomaly_scores, 95)
+        
+        metrics = utils.calculate_metrics(y_test, predictions, anomaly_scores)
+        
+        return None, metrics['AUC-ROC'], threshold, predictions, metrics
+
+# Legacy Compatibility
 def load_data():
     """Load daily features for Isolation Forest"""
     file_path = config.DAILY_FEATURES_FILE
@@ -29,49 +98,16 @@ def load_data():
         logger.error(f"Error loading daily features: {e}")
         return None
 
-def load_static_scaler():
-    """Load the fitted scaler for static features using joblib"""
-    scaler_path = config.MODEL_PATHS['static_scaler']
-    if not scaler_path.exists():
-        logger.error(f"Static scaler not found at {scaler_path}")
-        return None
-    
-    try:
-        # joblib.load is more robust for sklearn objects than pickle
-        scaler = joblib.load(scaler_path)
-        return scaler
-    except Exception as e:
-        logger.error(f"Failed to load scaler: {e}")
-        return None
-
 def train_isolation_forest(X, **kwargs):
-    """
-    Trains an Isolation Forest model.
-
-    Args:
-        X (pd.DataFrame or np.ndarray): The input feature matrix.
-        **kwargs: Hyperparameters for Isolation Forest, which will override config defaults.
-
-    Returns:
-        A trained IsolationForest model instance.
-    """
-    model_config = config.ISOLATION_FOREST.copy()
-    model_config.update(kwargs)
-
-    clf = IsolationForest(
-        n_estimators=model_config['n_estimators'],
-        max_samples=model_config['max_samples'],
-        contamination=model_config['contamination'],
-        max_features=model_config['max_features'],
-        bootstrap=model_config['bootstrap'],
-        n_jobs=model_config['n_jobs'],
-        random_state=model_config['random_state'],
-        verbose=model_config['verbose']
-    )
+    """Legacy wrapper fitting the new Class logic"""
+    # Extract known kwargs
+    n_estimators = kwargs.get('n_estimators')
+    contamination = kwargs.get('contamination')
     
-    logger.info(f"Training Isolation Forest with params: { {k: v for k, v in model_config.items() if k != 'random_state'} }")
-    clf.fit(X)
-    return clf
+    wrapper = IsolationForestModel(n_estimators=n_estimators, contamination=contamination)
+    # Fit manual
+    wrapper.train_and_evaluate(X, None, X, np.zeros(len(X))) # Dummy call to fit
+    return wrapper.model
 
 def main():
     logger.info(utils.generate_report_header("ISOLATION FOREST TRAINING"))
@@ -84,20 +120,23 @@ def main():
     # 2. Preprocessing
     exclude_cols = ['user', 'day', 'is_anomaly', 'is_insider']
     feature_cols = [c for c in df.columns if c not in exclude_cols]
-    X = df[feature_cols].fillna(0)
+    X = df[feature_cols].fillna(0).values # Convert to numpy array
     
-    # 3. Train Model using the new function
-    clf = train_isolation_forest(X, **config.ISOLATION_FOREST)
+    true_labels = df['is_anomaly'].values if 'is_anomaly' in df.columns else np.zeros(len(X))
+
+    # 3. Train & Evaluate using Wrapper
+    model_wrapper = IsolationForestModel(**config.ISOLATION_FOREST)
     
-    # 4. Predict / Generate Scores
-    # decision_function returns negative values for anomalies, we invert so higher is more anomalous
+    # For main run, we typically train on everything or split?
+    # Original main() trained on X and evaluated on X (unsupervised assumption)
+    # We will preserve that behavior
+    _, auc, _, predictions, metrics = model_wrapper.train_and_evaluate(X, None, X, true_labels)
+    
+    clf = model_wrapper.model
+    
+    # Re-calculate scores for saving (train_and_evaluate does it internally on X_test=X)
     raw_scores = clf.decision_function(X)
-    anomaly_scores = -raw_scores 
-    
-    # predict returns -1 for outlier, 1 for inlier
-    predictions = clf.predict(X)
-    # Convert to 0 (normal) and 1 (anomaly)
-    binary_predictions = np.where(predictions == -1, 1, 0)
+    anomaly_scores = -raw_scores
     
     # 5. Save Model
     try:
@@ -108,12 +147,8 @@ def main():
 
     # 6. Save Predictions
     results_df = df[['user', 'day']].copy()
-    if 'is_anomaly' in df.columns:
-        results_df['true_label'] = df['is_anomaly']
-    else:
-        results_df['true_label'] = 0
-        
-    results_df['prediction'] = binary_predictions
+    results_df['true_label'] = true_labels
+    results_df['prediction'] = predictions
     results_df['anomaly_score'] = anomaly_scores
     
     output_path = config.RESULTS_DIR / 'isolation_forest_predictions.csv'
@@ -121,7 +156,6 @@ def main():
     logger.info(f"Predictions saved to {output_path}")
     
     # 7. Metrics
-    metrics = utils.calculate_metrics(results_df['true_label'], binary_predictions, anomaly_scores)
     utils.print_metrics(metrics, "Isolation Forest")
     
     return clf, metrics
