@@ -154,6 +154,59 @@ class HyperparameterSensitivity:
 
 
 
+    def plot_sensitivity_results(self, lstm_df, if_df):
+        """
+        Generate visualization plots for sensitivity analysis.
+        """
+        logger.info("Generating sensitivity plots...")
+        
+        # Setup plot
+        fig, axes = plt.subplots(1, 2, figsize=(18, 6))
+        
+        # --- 1. LSTM Sensitivity ---
+        if not lstm_df.empty:
+            # Pivot for heatmap if possible, otherwise swarm/box
+            # If we have multiple runs, we take mean.
+            # Here we assume unique combinations.
+            
+            # Create a combined 'config' column for x-axis if not pivoting
+            lstm_df['config_label'] = lstm_df.apply(lambda row: f"U:{row['units']}\nD:{row['dropout']}", axis=1)
+            
+            sns.barplot(data=lstm_df, x='config_label', y='auc', ax=axes[0], palette='viridis')
+            axes[0].set_title("LSTM Autoencoder Sensitivity\n(Impact of Topology & Dropout)")
+            axes[0].set_ylabel("AUC-ROC")
+            axes[0].set_xlabel("Configuration (Units, Dropout)")
+            axes[0].tick_params(axis='x', rotation=45)
+            axes[0].set_ylim(0.5, 1.0)
+            
+        # --- 2. Isolation Forest Sensitivity ---
+        if not if_df.empty:
+            # Pivot for heatmap: n_estimators vs contamination
+            # Convert contamination 'auto' to string for categorical plotting
+            if_df['contamination'] = if_df['contamination'].astype(str)
+            
+            pivot_table = if_df.pivot_table(values='auc', index='n_estimators', columns='contamination', aggfunc='mean')
+            
+            sns.heatmap(pivot_table, annot=True, fmt=".3f", cmap="YlGnBu", ax=axes[1])
+            axes[1].set_title("Isolation Forest Sensitivity\n(Estimators vs Contamination)")
+            axes[1].set_ylabel("Number of Estimators")
+            axes[1].set_xlabel("Contamination Rate")
+            
+        plt.tight_layout()
+        output_path = self.results_dir / 'sensitivity_summary.png'
+        plt.savefig(output_path)
+        logger.info(f"Sensitivity plots saved to {output_path}")
+        plt.close() # Close plot to free memory
+
 if __name__ == "__main__":
     analyzer = HyperparameterSensitivity()
     logger.info("Hyperparameter Sensitivity Analyzer initialized.")
+    
+    # Run analyses
+    lstm_results = analyzer.run_lstm_sensitivity()
+    if_results = analyzer.run_isolation_forest_sensitivity()
+    
+    # Generate plots
+    analyzer.plot_sensitivity_results(lstm_results, if_results)
+    
+    logger.info("Sensitivity Analysis Complete.")

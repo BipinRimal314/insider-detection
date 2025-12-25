@@ -109,3 +109,31 @@ class TestHyperparameterSensitivity(unittest.TestCase):
         
         MockIF.assert_called()
         mock_model_instance.train_and_evaluate.assert_called()
+
+    @patch('hyperparameter_sensitivity.utils')
+    @patch('hyperparameter_sensitivity.plt')
+    @patch('hyperparameter_sensitivity.sns')
+    def test_plot_sensitivity_results(self, mock_sns, mock_plt, mock_utils):
+        """Test the visualization generation logic."""
+        # Configure mocks
+        mock_fig = MagicMock()
+        mock_axes = [MagicMock(), MagicMock()]
+        mock_plt.subplots.return_value = (mock_fig, mock_axes)
+        
+        # Create dummy results
+        lstm_df = pd.DataFrame({'units': ['[16, 8]'], 'dropout': [0.1], 'auc': [0.9]})
+        if_df = pd.DataFrame({'n_estimators': [100], 'contamination': ['auto'], 'auc': [0.85]})
+        
+        # Call plotting
+        self.analyzer.plot_sensitivity_results(lstm_df, if_df)
+        
+        # Verify plots were saved
+        # Check that suptitle was called (proxy for plotting happening)
+        # We can't easily check file creation with mocks unless we mock savefig
+        # Let's verify sns.heatmap or lineplot was called
+        
+        # Since logic isn't written yet, we expect this test to fail (Red Phase)
+        # or error if method doesn't exist
+        mock_sns.barplot.assert_called()
+        mock_sns.heatmap.assert_called()
+        mock_plt.savefig.assert_called()
