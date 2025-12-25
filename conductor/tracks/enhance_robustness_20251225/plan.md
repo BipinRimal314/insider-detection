@@ -8,8 +8,8 @@
 - [x] Task: Conductor - User Manual Verification 'Hyperparameter Sensitivity Infrastructure' (Protocol in workflow.md)
 
 ## Phase 2: Robustness & Adversarial Testing
-- [~] Task: Implement "Boiling Frog" (Slow Evasion) attack generator in `synthetic_attacks.py`
-- [ ] Task: Implement Data Perturbation simulation in `feature_engineering_polars.py`
+- [x] 06964ed Task: Implement "Boiling Frog" (Slow Evasion) attack generator in `synthetic_attacks.py`
+- [~] Task: Implement Data Perturbation simulation in `feature_engineering_polars.py`
 - [ ] Task: Create `robustness_analysis.py` to execute and report on these tests
 - [ ] Task: Conductor - User Manual Verification 'Robustness & Adversarial Testing' (Protocol in workflow.md)
 
