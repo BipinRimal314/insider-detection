@@ -84,6 +84,15 @@ class AttackSimulator:
                     'after_hours_activity': (1.5, 3)
                 },
                 'duration_days': (30, 90)
+            },
+            'boiling_frog': {
+                'description': 'Gradual escalation of privileges and data access',
+                'features': {
+                    'file_access_count': (1.0, 5.0),  # Start normal(ish), end high
+                    'email_count': (1.0, 3.0),
+                    'after_hours_activity': (1.0, 4.0)
+                },
+                'duration_days': (14, 30)
             }
         }
     
@@ -167,7 +176,15 @@ class AttackSimulator:
             for feature, (min_mult, max_mult) in pattern['features'].items():
                 if feature in stats:
                     base_value = stats[feature]['mean']
-                    multiplier = random.uniform(min_mult, max_mult)
+                    
+                    # Special logic for Boiling Frog: Linear Interpolation
+                    if attack_type == 'boiling_frog':
+                        # Calculate progress ratio (0.0 to 1.0)
+                        progress = day_offset / max(1, duration - 1)
+                        # Interpolate multiplier
+                        multiplier = min_mult + (max_mult - min_mult) * progress
+                    else:
+                        multiplier = random.uniform(min_mult, max_mult)
                     
                     # For subtle attacks, add noise
                     if attack_type == 'subtle_exfiltration':
