@@ -1,0 +1,5 @@
+model,accuracy,precision,recall,f1_score,auc_roc
+Isolation Forest,0.9129,0.0003,0.375,0.0005,0.7897
+Lstm Autoencoder,0.9499,0.0001,0.0417,0.0001,0.5829
+Deep Clustering,0.9497,0.0002,0.1667,0.0004,0.806
+Ensemble (cascade),0.9977,0.0,0.0,0.0,0.5996

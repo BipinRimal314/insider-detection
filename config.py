@@ -38,6 +38,14 @@ SEQUENCE_LABELS_FILE = PROCESSED_DATA_DIR / "sequence_labels.npy"
 # Datasets to process (Use only 'r1' for speed)
 DATASET_SUBSET = ['r1', 'r2', 'r3.1', 'r3.2', 'r4.1'] 
 
+# Cross-Dataset Generalization Configuration
+# When enabled, models are trained on TRAIN_DATASETS and evaluated on TEST_DATASETS
+CROSS_DATASET_EVAL = {
+    'enabled': True,
+    'train_datasets': ['r1', 'r2', 'r3.1', 'r3.2', 'r4.1'],
+    'test_datasets': ['r4.2', 'r5.1', 'r5.2']  # Hold-out for generalization testing
+} 
+
 LOG_FILENAMES = {
     'logon': 'logon.csv',
     'device': 'device.csv',
@@ -75,6 +83,19 @@ SEQUENCE_STRIDE = 10
 
 # Set to None to use full dataset (was 5000 for debugging)
 MAX_SEQUENCE_SAMPLES = None
+
+# Z-Score Feature Configuration
+ZSCORE_CONFIG = {
+    'rolling_window_days': 30,      # Days to use for rolling mean/std
+    'min_history_days': 7,          # Minimum days of history before computing Z-scores
+    'features_to_zscore': [         # Features to compute Z-scores for
+        'logon_count',
+        'file_access_count', 
+        'email_count',
+        'after_hours_activity',
+        'daily_activity_count'
+    ]
+}
 
 # ============================================================================
 # ISOLATION FOREST PARAMETERS (Fast Mode)

@@ -27,22 +27,32 @@ import utils
 logger = utils.logger
 
 def build_lstm_autoencoder(input_shape):
-    """Build LSTM Autoencoder architecture"""
-    # Encoder
+    """Build a flexible LSTM Autoencoder architecture based on config."""
     inputs = Input(shape=input_shape)
-    encoded = LSTM(config.LSTM_AUTOENCODER['lstm_units'][0], activation='relu', return_sequences=True)(inputs)
-    encoded = Dropout(config.LSTM_AUTOENCODER['dropout_rate'])(encoded)
-    encoded = LSTM(config.LSTM_AUTOENCODER['lstm_units'][1], activation='relu', return_sequences=False)(encoded)
     
-    # Latent space representation
-    decoded = RepeatVector(input_shape[0])(encoded)
+    # --- Dynamically build the Encoder ---
+    encoded = inputs
+    lstm_units = config.LSTM_AUTOENCODER['lstm_units']
+    # Iterate through all but the last layer which should not return sequences
+    for i, units in enumerate(lstm_units):
+        return_sequences = (i < len(lstm_units) - 1)
+        encoded = LSTM(units, activation='relu', return_sequences=return_sequences)(encoded)
+        if i < len(lstm_units) - 1: # No dropout on the latent space layer
+             encoded = Dropout(config.LSTM_AUTOENCODER['dropout_rate'])(encoded)
+
+    # --- Latent space representation ---
+    # The final encoder layer's output is the latent space
+    latent_space = encoded
     
-    # Decoder
-    decoded = LSTM(config.LSTM_AUTOENCODER['lstm_units'][1], activation='relu', return_sequences=True)(decoded)
-    decoded = Dropout(config.LSTM_AUTOENCODER['dropout_rate'])(decoded)
-    decoded = LSTM(config.LSTM_AUTOENCODER['lstm_units'][0], activation='relu', return_sequences=True)(decoded)
+    decoded = RepeatVector(input_shape[0])(latent_space)
     
-    # Output
+    # --- Dynamically build the Decoder ---
+    # Iterate in reverse, but use the same layer structure
+    for units in reversed(lstm_units):
+        decoded = LSTM(units, activation='relu', return_sequences=True)(decoded)
+        decoded = Dropout(config.LSTM_AUTOENCODER['dropout_rate'])(decoded)
+        
+    # --- Output Layer ---
     output = TimeDistributed(Dense(input_shape[1]))(decoded)
     
     model = Model(inputs, output)

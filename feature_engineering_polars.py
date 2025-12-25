@@ -82,6 +82,9 @@ class FeatureEngineerPolars:
         logger.info("Executing aggregation (Streaming Mode)...")
         daily_features = daily_features_lf.collect(streaming=True)
         
+        # 2b. Compute Z-Score Features (Self-relative and Peer-relative)
+        daily_features = self._compute_zscore_features(daily_features)
+        
         # SAVE 1: Save daily features for Isolation Forest
         self._save_parquet(daily_features, self.daily_output)
         
@@ -140,6 +143,110 @@ class FeatureEngineerPolars:
         daily_lf = daily_lf.sort(['user', 'day'])
         
         return daily_lf
+
+    def _compute_zscore_features(self, daily_df: pl.DataFrame) -> pl.DataFrame:
+        """
+        Compute self-relative and peer-relative Z-score features.
+        
+        Self-relative: How different is today from this user's own rolling history?
+        Peer-relative: How different is this user from others (global baseline)?
+        
+        Args:
+            daily_df: DataFrame with daily aggregated features
+            
+        Returns:
+            DataFrame with additional Z-score columns
+        """
+        logger.info("Computing Z-score features...")
+        
+        zscore_config = getattr(config, 'ZSCORE_CONFIG', None)
+        if not zscore_config:
+            logger.warning("ZSCORE_CONFIG not found in config, skipping Z-score computation")
+            return daily_df
+        
+        window_days = zscore_config.get('rolling_window_days', 30)
+        min_history = zscore_config.get('min_history_days', 7)
+        features = zscore_config.get('features_to_zscore', [])
+        
+        # Filter to features that exist in the dataframe
+        available_features = [f for f in features if f in daily_df.columns]
+        if not available_features:
+            logger.warning(f"No Z-score target features found in dataframe. Available: {daily_df.columns}")
+            return daily_df
+        
+        logger.info(f"  Computing Z-scores for: {available_features}")
+        logger.info(f"  Rolling window: {window_days} days, Min history: {min_history} days")
+        
+        # =====================================================================
+        # 1. SELF-RELATIVE Z-SCORES (Rolling window per user)
+        # =====================================================================
+        # Sort by user and day for rolling window
+        daily_df = daily_df.sort(['user', 'day'])
+        
+        self_zscore_cols = []
+        for feat in available_features:
+            # Rolling mean and std over window_days for each user
+            mean_col = f"{feat}_rolling_mean"
+            std_col = f"{feat}_rolling_std"
+            zscore_col = f"{feat}_self_zscore"
+            
+            daily_df = daily_df.with_columns([
+                pl.col(feat).rolling_mean(window_size=window_days, min_periods=min_history)
+                    .over('user').alias(mean_col),
+                pl.col(feat).rolling_std(window_size=window_days, min_periods=min_history)
+                    .over('user').alias(std_col)
+            ])
+            
+            # Compute Z-score: (value - mean) / std
+            # Handle division by zero by replacing with 0
+            daily_df = daily_df.with_columns(
+                pl.when(pl.col(std_col) > 0)
+                .then((pl.col(feat) - pl.col(mean_col)) / pl.col(std_col))
+                .otherwise(0.0)
+                .alias(zscore_col)
+            )
+            
+            # Drop intermediate columns
+            daily_df = daily_df.drop([mean_col, std_col])
+            self_zscore_cols.append(zscore_col)
+        
+        # =====================================================================
+        # 2. PEER-RELATIVE Z-SCORES (Compare to global population)
+        # =====================================================================
+        # Compute global mean and std for each feature
+        global_stats = daily_df.select([
+            pl.col(feat).mean().alias(f"{feat}_global_mean")
+            for feat in available_features
+        ] + [
+            pl.col(feat).std().alias(f"{feat}_global_std")
+            for feat in available_features
+        ]).row(0, named=True)
+        
+        peer_zscore_cols = []
+        for feat in available_features:
+            zscore_col = f"{feat}_peer_zscore"
+            global_mean = global_stats[f"{feat}_global_mean"]
+            global_std = global_stats[f"{feat}_global_std"]
+            
+            if global_std and global_std > 0:
+                daily_df = daily_df.with_columns(
+                    ((pl.col(feat) - global_mean) / global_std).alias(zscore_col)
+                )
+            else:
+                daily_df = daily_df.with_columns(
+                    pl.lit(0.0).alias(zscore_col)
+                )
+            peer_zscore_cols.append(zscore_col)
+        
+        # Fill any remaining nulls (from insufficient history)
+        all_zscore_cols = self_zscore_cols + peer_zscore_cols
+        daily_df = daily_df.with_columns([
+            pl.col(c).fill_null(0.0) for c in all_zscore_cols
+        ])
+        
+        logger.info(f"  ✓ Added {len(all_zscore_cols)} Z-score features")
+        
+        return daily_df
 
     def _create_static_features(self, daily_df):
         """Create static profiles"""

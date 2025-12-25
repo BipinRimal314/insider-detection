@@ -44,23 +44,20 @@ def load_static_scaler():
         logger.error(f"Failed to load scaler: {e}")
         return None
 
-def main():
-    logger.info(utils.generate_report_header("ISOLATION FOREST TRAINING (V2: MULTI-DATASET)"))
-    
-    # 1. Load Data
-    df = load_data()
-    if df is None:
-        return None, None
+def train_isolation_forest(X, **kwargs):
+    """
+    Trains an Isolation Forest model.
 
-    # 2. Preprocessing
-    # Drop non-feature columns
-    exclude_cols = ['user', 'day', 'is_anomaly', 'is_insider']
-    feature_cols = [c for c in df.columns if c not in exclude_cols]
-    
-    X = df[feature_cols]
-    
-    # 3. Train Model
-    model_config = config.ISOLATION_FOREST
+    Args:
+        X (pd.DataFrame or np.ndarray): The input feature matrix.
+        **kwargs: Hyperparameters for Isolation Forest, which will override config defaults.
+
+    Returns:
+        A trained IsolationForest model instance.
+    """
+    model_config = config.ISOLATION_FOREST.copy()
+    model_config.update(kwargs)
+
     clf = IsolationForest(
         n_estimators=model_config['n_estimators'],
         max_samples=model_config['max_samples'],
@@ -72,7 +69,25 @@ def main():
         verbose=model_config['verbose']
     )
     
+    logger.info(f"Training Isolation Forest with params: { {k: v for k, v in model_config.items() if k != 'random_state'} }")
     clf.fit(X)
+    return clf
+
+def main():
+    logger.info(utils.generate_report_header("ISOLATION FOREST TRAINING"))
+    
+    # 1. Load Data
+    df = load_data()
+    if df is None:
+        return None, None
+
+    # 2. Preprocessing
+    exclude_cols = ['user', 'day', 'is_anomaly', 'is_insider']
+    feature_cols = [c for c in df.columns if c not in exclude_cols]
+    X = df[feature_cols].fillna(0)
+    
+    # 3. Train Model using the new function
+    clf = train_isolation_forest(X, **config.ISOLATION_FOREST)
     
     # 4. Predict / Generate Scores
     # decision_function returns negative values for anomalies, we invert so higher is more anomalous
