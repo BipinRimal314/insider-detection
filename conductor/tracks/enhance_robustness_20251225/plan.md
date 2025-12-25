@@ -4,8 +4,8 @@
 - [x] 634a9b2 Task: Create `hyperparameter_sensitivity.py` script structure
 - [x] e9ba018 Task: Implement LSTM sensitivity analysis logic (variable units/dropout)
 - [x] 60c47dc Task: Implement Isolation Forest sensitivity analysis logic (variable estimators)
-- [ ] Task: Generate visualization plots for sensitivity results
-- [ ] Task: Conductor - User Manual Verification 'Hyperparameter Sensitivity Infrastructure' (Protocol in workflow.md)
+- [x] f2077f9 Task: Generate visualization plots for sensitivity results
+- [~] Task: Conductor - User Manual Verification 'Hyperparameter Sensitivity Infrastructure' (Protocol in workflow.md)
 
 ## Phase 2: Robustness & Adversarial Testing
 - [ ] Task: Implement "Boiling Frog" (Slow Evasion) attack generator in `synthetic_attacks.py`
