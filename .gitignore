@@ -1,10 +1,62 @@
-__pycache__
-.venv_tf
-12841247
-answers
-data
-models
-r5.1
-r5.2
-.python-version
-.gitconfig  
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Virtual environments
+.venv_tf/
+.venv/
+venv/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data (large files)
+data/
+!data/.gitkeep
+
+# Results (can be regenerated)
+results/
+!results/.gitkeep
+
+# Logs
+logs/
+!logs/.gitkeep
+
+# Coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# LaTeX build artifacts
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.log
+paper/*.out
+paper/*.toc
+paper/*.fdb_latexmk
+paper/*.fls
+paper/*.synctex.gz
+
+# Folder
+
+conductor/
+docs/

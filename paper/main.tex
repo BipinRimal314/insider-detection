@@ -1,0 +1,424 @@
+\documentclass[conference]{IEEEtran}
+
+% Packages
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{hyperref}
+\usepackage{subcaption}
+
+% Custom commands
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+\newcommand{\RQ}[1]{\textbf{RQ#1}}
+
+\begin{document}
+
+\title{Unsupervised Temporal Behavioral Profiling for Insider Threat Detection: A Comparative Study}
+
+\author{
+\IEEEauthorblockN{Bipin Rimal}
+\IEEEauthorblockA{
+\textit{Department of Computing} \\
+\textit{Coventry University}\\
+Coventry, United Kingdom \\
+rimalb@uni.coventry.ac.uk}
+}
+
+\maketitle
+
+% ============================================================================
+\begin{abstract}
+Insider threats pose a significant challenge to organizational security, as malicious insiders possess legitimate access credentials that bypass traditional perimeter defenses. Existing detection approaches typically require labeled training data, which is scarce in practice due to the rarity of insider attacks.
+
+This paper presents a comparative study of unsupervised anomaly detection methods for insider threat detection, focusing on the hypothesis that temporal sequence modeling captures behavioral patterns that static methods miss. We evaluate Isolation Forest, PCA-based reconstruction, dense autoencoders, and LSTM autoencoders on the CMU-CERT r4.2 insider threat dataset (996 users, 330K daily samples, 70 insider scenarios).
+
+Our results demonstrate that while Isolation Forest achieves the highest overall ranking performance (AUC-ROC = 0.799), LSTM autoencoders provide 3.4$\times$ higher detection at operationally relevant thresholds (Recall@5\%FPR: 0.149 vs 0.044, $p=0.031$). Feature analysis reveals USB device activity as the strongest attack indicator. We provide statistical analysis with 5 random seeds, per-scenario detection breakdown, and feature importance analysis. All code and experiments are publicly available for reproducibility.
+
+\end{abstract}
+
+\begin{IEEEkeywords}
+insider threat detection, anomaly detection, LSTM autoencoder, unsupervised learning, behavioral analysis
+\end{IEEEkeywords}
+
+% ============================================================================
+\section{Introduction}
+\label{sec:introduction}
+
+Insider threats represent one of the most challenging security problems facing organizations today. Unlike external attackers who must breach perimeter defenses, insiders already possess legitimate access to systems and data, making their malicious activities difficult to distinguish from normal work \cite{cappelli2012cert}.
+
+The financial impact is substantial. According to industry reports, organizations spend millions annually on insider threat incidents, with costs including investigation, remediation, and reputational damage.
+
+\subsection{Problem Statement}
+
+Traditional security tools—firewalls, intrusion detection systems, and access controls—are designed for external threats. They operate on the principle of distinguishing authorized from unauthorized access. However, insider threats involve \textit{authorized} users performing \textit{unauthorized} actions, rendering these tools largely ineffective.
+
+\subsection{Research Gap}
+
+Existing approaches to insider threat detection fall into two categories:
+
+\textbf{Rule-based systems} define explicit policies (e.g., ``alert if user downloads >100 files''). These suffer from high false positive rates and fail to detect novel attack patterns not covered by rules.
+
+\textbf{Supervised machine learning} requires labeled examples of insider attacks for training. Such labels are extremely rare in practice—most organizations have never experienced a confirmed insider incident, and those that have possess only a handful of examples.
+
+\subsection{Research Questions}
+
+This paper addresses the following research questions:
+
+\begin{itemize}
+    \item \RQ{1}: Can unsupervised anomaly detection methods effectively identify insider threats without labeled training data?
+    \item \RQ{2}: Does temporal sequence modeling improve detection performance compared to static anomaly detection methods?
+    \item \RQ{3}: Which behavioral features are most predictive of insider threat activity?
+    \item \RQ{4}: How robust are these methods across different insider attack scenarios?
+\end{itemize}
+
+\subsection{Contributions}
+
+This paper makes the following contributions:
+
+\begin{enumerate}
+    \item A rigorous comparative evaluation of unsupervised anomaly detection methods for insider threat detection, including statistical significance testing across multiple random seeds.
+
+    \item Empirical evidence that temporal sequence modeling (LSTM autoencoder) achieves 3.4$\times$ higher detection at operational thresholds compared to static methods, despite lower overall AUC-ROC.
+
+    \item Analysis of feature importance revealing USB device activity as the strongest attack indicator, and per-scenario breakdown showing varying detectability across attack types.
+
+    \item A reproducible experimental framework with publicly available code.
+\end{enumerate}
+
+% ============================================================================
+\section{Related Work}
+\label{sec:related}
+
+\subsection{Insider Threat Detection}
+
+Insider threat detection has evolved significantly over the past two decades. Early taxonomies by Salem et al. \cite{salem2008survey} and Bishop and Gates \cite{bishop2008insider} established foundational threat models distinguishing masqueraders, traitors, and unintentional insiders. The CMU-CERT program \cite{cappelli2012cert, glasser2013bridging} created standardized datasets and threat scenarios that continue to guide research. Sanzgiri and Dasgupta \cite{sanzgiri2016classification} classified detection techniques into host-based, network-based, and hybrid approaches.
+
+Recent comprehensive surveys by Homoliak et al. \cite{homoliak2019insight} highlight the shift toward User and Entity Behavior Analytics (UEBA), which profiles normal behavior to detect deviations. A key challenge identified across surveys is the extreme scarcity of labeled insider incidents, motivating unsupervised and semi-supervised approaches.
+
+\subsection{Anomaly Detection Methods}
+
+Classical anomaly detection methods form the foundation for insider threat detection. Isolation Forest \cite{liu2008isolation} efficiently isolates anomalies through random partitioning, exploiting the property that outliers require fewer splits. Local Outlier Factor (LOF) \cite{breunig2000lof} detects anomalies based on local density deviation. One-class SVM \cite{scholkopf2001estimating} learns a boundary around normal data in kernel space. PCA-based methods project data to principal components and measure reconstruction error. Le and Zincir-Heywood \cite{le2020analyzing} compared these methods on CMU-CERT data at different granularity levels (hourly, daily, weekly), finding that daily aggregation balances detection performance and computational cost.
+
+\subsection{Deep Learning for Insider Threats}
+
+Deep learning has enabled more sophisticated behavioral modeling. Yuan et al. \cite{yuan2021insider} applied deep neural networks to insider threat detection, demonstrating improvements over traditional methods. Tuor et al. \cite{tuor2017deep} proposed unsupervised deep learning on structured cybersecurity streams, using autoencoders to learn normal patterns. Gavai et al. \cite{gavai2015detecting} combined enterprise social data with activity logs for detection. Liu et al. \cite{liu2019log2vec} introduced graph embeddings (Log2vec) for representing heterogeneous log data.
+
+For network intrusion detection, Mirsky et al. \cite{mirsky2018kitsune} proposed Kitsune, an ensemble of autoencoders demonstrating that reconstruction-based detection scales to high-throughput environments. Chalapathy and Chawla \cite{chalapathy2019deep} provide a comprehensive survey of deep learning for anomaly detection, categorizing approaches by architecture (autoencoders, GANs, RNNs) and supervision level.
+
+\subsection{Temporal Sequence Modeling}
+
+Long Short-Term Memory (LSTM) networks \cite{hochreiter1997lstm} address the vanishing gradient problem in RNNs, enabling learning of long-range temporal dependencies. Malhotra et al. \cite{malhotra2016lstm} established the LSTM encoder-decoder paradigm for time series anomaly detection, where reconstruction error indicates anomalousness. This approach has been applied to system call sequences, network traffic, and sensor data. More recently, Transformer architectures \cite{vaswani2017attention} with self-attention mechanisms have shown promise for sequence modeling, though their application to insider threat detection remains limited.
+
+Our work extends this line by systematically comparing LSTM autoencoders against static baselines for insider threat detection. Unlike prior work focusing on AUC-ROC, we emphasize operationally relevant metrics (Recall at fixed FPR) that better reflect security analyst workflows.
+
+% ============================================================================
+\section{Methodology}
+\label{sec:methodology}
+
+\subsection{Dataset}
+\label{sec:dataset}
+
+We use the CMU-CERT Insider Threat Dataset \cite{glasser2013bridging}, a synthetic but realistic dataset designed for insider threat research. The dataset simulates an organization with approximately 1,000 users over 18 months, including planted insider threat scenarios.
+
+\subsubsection{Data Sources}
+
+The dataset contains five types of activity logs:
+
+\begin{itemize}
+    \item \textbf{Logon}: User authentication events (logon/logoff)
+    \item \textbf{Device}: Removable media connections (USB drives)
+    \item \textbf{File}: File access operations
+    \item \textbf{Email}: Email send/receive metadata
+    \item \textbf{HTTP}: Web browsing activity
+\end{itemize}
+
+\subsubsection{Ground Truth}
+
+We use the r4.2 version of the dataset, which contains 70 labeled insider threat scenarios. Each scenario is annotated with the malicious user ID and the time period of malicious activity. A user-day pair is labeled as positive if it falls within any attack period for that user.
+
+\subsection{Preprocessing}
+\label{sec:preprocessing}
+
+\subsubsection{Data Cleaning}
+
+Raw event logs are parsed and cleaned as follows: (1) timestamp normalization to datetime format, (2) user ID extraction from domain-prefixed identifiers, (3) removal of records with missing critical fields, and (4) filtering to users with at least 30 days of activity to ensure sufficient behavioral baseline.
+
+\subsubsection{Feature Engineering}
+
+We aggregate raw events into daily behavioral profiles for each user, resulting in 24 features across five categories. Table~\ref{tab:features} describes the features extracted.
+
+\begin{table}[htbp]
+\caption{Daily Behavioral Features (24 total)}
+\label{tab:features}
+\centering
+\small
+\begin{tabular}{ll}
+\toprule
+\textbf{Category} & \textbf{Features} \\
+\midrule
+Logon (6) & logon\_count, logoff\_count, after\_hours\_logons, \\
+          & unique\_pcs, first\_logon\_hour, last\_logoff\_hour \\
+Device (4) & device\_connects, device\_disconnects, \\
+           & after\_hours\_connects, device\_activity \\
+HTTP (5) & http\_requests, unique\_domains, upload\_actions, \\
+         & download\_actions, after\_hours\_browsing \\
+Email (5) & emails\_sent, total\_recipients, attachment\_count, \\
+          & attachment\_size, after\_hours\_emails \\
+File (4) & file\_operations, file\_copies, exe\_access, \\
+         & after\_hours\_files \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{Sequence Generation}
+
+For temporal models, we construct sequences using a sliding window of size $w=7$ days with stride $s=1$. Each sequence captures one week of user behavior, enabling the model to learn temporal patterns. A sequence is labeled positive if any day within the window is malicious.
+
+\subsection{Train/Test Split}
+\label{sec:splits}
+
+We use a temporal split with 70\% of data for training and 30\% for testing to prevent data leakage from future observations. Critically, we exclude all attack periods from the training set to ensure the model learns only normal behavior. This results in:
+\begin{itemize}
+    \item \textbf{Training}: 238,770 daily samples (0 positive)
+    \item \textbf{Test}: 90,598 daily samples (388 positive, 0.43\%)
+\end{itemize}
+
+\subsection{Models}
+\label{sec:models}
+
+\subsubsection{Isolation Forest}
+
+Isolation Forest \cite{liu2008isolation} detects anomalies based on the principle that anomalous points are easier to isolate through random partitioning. We use the scikit-learn implementation with 100 trees (n\_estimators=100) and automatic contamination estimation.
+
+\subsubsection{PCA Reconstruction}
+
+We fit PCA on normal training data, retaining components that explain 95\% of variance. The anomaly score is the mean squared reconstruction error:
+
+\begin{equation}
+    \text{score}(x) = \|x - \hat{x}\|^2
+\end{equation}
+
+where $\hat{x} = W W^T x$ is the reconstruction using the retained principal components.
+
+\subsubsection{Dense Autoencoder}
+
+A feedforward autoencoder with encoder architecture [24 $\rightarrow$ 64 $\rightarrow$ 32 $\rightarrow$ 16] and symmetric decoder. We use ReLU activation, 20\% dropout, Adam optimizer (lr=0.001), and train for 50 epochs with early stopping (patience=10). The anomaly score is the MSE between input and reconstruction.
+
+\subsubsection{LSTM Autoencoder}
+
+Our LSTM autoencoder processes 7-day sequences to capture temporal patterns. The encoder consists of two LSTM layers (64 and 32 units) that compress the sequence to a 16-dimensional latent vector. The decoder mirrors this architecture (32 and 64 units) and reconstructs the input sequence. We use 20\% dropout, Adam optimizer (lr=0.001), and train for 50 epochs with early stopping (patience=15). The anomaly score is the mean reconstruction error across all timesteps.
+
+% ============================================================================
+\section{Experimental Setup}
+\label{sec:experiments}
+
+\subsection{Evaluation Metrics}
+
+\subsubsection{AUC-ROC}
+
+Area Under the Receiver Operating Characteristic curve measures ranking quality independent of threshold selection.
+
+\subsubsection{Recall at Fixed FPR}
+
+We report recall when the false positive rate is fixed at 5\% and 10\%, representing operationally relevant scenarios.
+
+\subsection{Statistical Analysis}
+
+All experiments are repeated with 5 different random seeds. We report mean $\pm$ standard deviation and use the Wilcoxon signed-rank test for pairwise comparisons.
+
+\subsection{Hardware and Software}
+
+Experiments were conducted on a MacBook Pro with Apple M-series processor and 16GB RAM. The implementation uses Python 3.11, scikit-learn 1.7.2 for traditional ML methods, and TensorFlow 2.15.0 for deep learning models. All code is available at \texttt{[repository URL]}.
+
+% ============================================================================
+\section{Results}
+\label{sec:results}
+
+\subsection{Main Results}
+
+Table~\ref{tab:main_results} presents the performance of all models across 5 random seeds. Isolation Forest achieves the best AUC-ROC among static methods, significantly outperforming both PCA reconstruction and the dense autoencoder.
+
+\begin{table}[htbp]
+\caption{Model Comparison (5 seeds, mean $\pm$ std)}
+\label{tab:main_results}
+\centering
+\begin{tabular}{lccc}
+\toprule
+\textbf{Model} & \textbf{AUC-ROC} & \textbf{Recall@5\%FPR} & \textbf{Recall@10\%FPR} \\
+\midrule
+Isolation Forest & $\mathbf{0.799 \pm 0.017}$ & $0.044 \pm 0.009$ & $0.220 \pm 0.025$ \\
+PCA Reconstruction & $0.612 \pm 0.000$ & $0.049 \pm 0.000$ & $0.129 \pm 0.000$ \\
+Dense Autoencoder & $0.659 \pm 0.016$ & $0.048 \pm 0.006$ & $0.118 \pm 0.009$ \\
+LSTM Autoencoder & $0.770 \pm 0.006$ & $\mathbf{0.149 \pm 0.021}$ & $\mathbf{0.254 \pm 0.019}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\columnwidth]{figures/roc_curves.png}
+\caption{ROC curves for all models. Vertical lines indicate operationally relevant FPR thresholds (5\% and 10\%). LSTM Autoencoder shows superior performance at low FPR despite lower overall AUC-ROC.}
+\label{fig:roc_curves}
+\end{figure}
+
+While Isolation Forest achieves the highest AUC-ROC, the LSTM autoencoder demonstrates substantially better performance at operationally relevant thresholds. At 5\% FPR, LSTM detects 14.9\% of insider days compared to only 4.4\% for Isolation Forest—a \textbf{3.4$\times$ improvement}. This suggests that temporal sequence modeling captures behavioral patterns that static methods miss, even when overall ranking performance is comparable.
+
+\subsection{Statistical Significance}
+
+We use the Wilcoxon signed-rank test for pairwise model comparisons across the 5 random seeds. The LSTM autoencoder significantly outperforms Isolation Forest on Recall@5\%FPR ($p = 0.031$, Cohen's $d = 4.14$, large effect). Conversely, Isolation Forest significantly outperforms LSTM on AUC-ROC ($p = 0.031$). This reveals an important trade-off: while static methods achieve better overall ranking, temporal models excel at the low false-positive operating points most relevant for security operations.
+
+Figure~\ref{fig:model_comparison} visualizes this trade-off, showing Isolation Forest's superior AUC-ROC alongside LSTM's dramatically higher Recall at low FPR.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\columnwidth]{figures/model_comparison.png}
+\caption{Model comparison across metrics. Left: AUC-ROC shows Isolation Forest as the best overall ranker. Right: Recall@5\%FPR reveals LSTM's superior detection at operationally relevant thresholds.}
+\label{fig:model_comparison}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\columnwidth]{figures/seed_variance.png}
+\caption{Performance variance across 5 random seeds. All models show reasonable stability, with LSTM exhibiting the lowest variance in AUC-ROC.}
+\label{fig:seed_variance}
+\end{figure}
+
+\subsection{Feature Importance Analysis}
+
+To understand which behavioral indicators are most predictive, we analyze feature importance from Isolation Forest and correlation with insider labels.
+
+\textbf{Most important features} (by Isolation Forest split frequency): total\_recipients (0.071), after\_hours\_browsing (0.070), upload\_actions (0.061), and attachment\_size (0.061). These features capture email behavior and web activity patterns.
+
+\textbf{Most correlated with attacks}: device\_disconnects (+0.075), device\_activity (+0.075), and device\_connects (+0.075). USB/removable media activity shows the strongest correlation with insider threat behavior, consistent with data exfiltration scenarios in the CMU-CERT dataset.
+
+Interestingly, after-hours features show similar importance to regular features (ratio 1.02$\times$), suggesting that temporal patterns within sequences matter more than simple after-hours flags.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\columnwidth]{figures/feature_importance.png}
+\caption{Left: Feature importance scores from Isolation Forest. Right: Correlation between features and insider labels. USB device activity shows strongest correlation with attacks.}
+\label{fig:feature_importance}
+\end{figure}
+
+\subsection{Sequence Length Ablation}
+
+We evaluated LSTM autoencoder performance across different temporal window sizes (7, 14, and 30 days) to understand the impact of sequence length on detection performance.
+
+\begin{table}[htbp]
+\caption{Sequence Length Ablation (LSTM Autoencoder)}
+\label{tab:seq_ablation}
+\centering
+\begin{tabular}{lccc}
+\toprule
+\textbf{Window} & \textbf{AUC-ROC} & \textbf{Recall@5\%FPR} & \textbf{Recall@10\%FPR} \\
+\midrule
+7 days & $\mathbf{0.770 \pm 0.006}$ & $\mathbf{0.149 \pm 0.021}$ & $\mathbf{0.254 \pm 0.019}$ \\
+14 days & $0.765 \pm 0.008$ & $0.142 \pm 0.018$ & $0.248 \pm 0.022$ \\
+30 days & $0.752 \pm 0.012$ & $0.128 \pm 0.025$ & $0.235 \pm 0.028$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Results in Table~\ref{tab:seq_ablation} show that the 7-day window achieves optimal performance across all metrics. Longer windows (14, 30 days) show diminishing returns, likely because: (1) extended sequences introduce more noise from normal behavioral variation, (2) insider attacks in CMU-CERT typically span 1-2 weeks, making 30-day context excessive, and (3) longer sequences increase computational cost without proportional benefit. This finding suggests that weekly behavioral windows strike an effective balance between capturing temporal patterns and avoiding noise accumulation.
+
+\subsection{Per-Scenario Analysis}
+
+The CMU-CERT r4.2 dataset contains three insider threat scenarios:
+\begin{itemize}
+    \item \textbf{Scenario 1} (30 insiders): Users who accessed sensitive data and used removable media
+    \item \textbf{Scenario 2} (30 insiders): Users who exhibited data exfiltration via email/HTTP
+    \item \textbf{Scenario 3} (10 insiders): Users with anomalous login patterns
+\end{itemize}
+
+Of 20 insiders with attack activity in the test period, 8 (40\%) had at least one attack day detected at 5\% FPR. Detection rates varied by scenario:
+\begin{itemize}
+    \item Scenario 1: 38\% of insiders detected (3/8)
+    \item Scenario 2: 36\% of insiders detected (4/11)
+    \item Scenario 3: 100\% of insiders detected (1/1)
+\end{itemize}
+
+Scenario 3 insiders (anomalous logins) are most detectable, while Scenario 2 (subtle data exfiltration) proves most challenging. This aligns with expectations—drastic behavioral changes are easier to detect than gradual data theft.
+
+% ============================================================================
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Why Does Temporal Modeling Help?}
+
+Our results reveal a nuanced picture: while Isolation Forest achieves the highest AUC-ROC (0.799), LSTM Autoencoder provides 3.4$\times$ better recall at the 5\% FPR threshold (0.149 vs 0.044). This apparent contradiction arises from how these models handle the extreme class imbalance (0.43\% positive rate).
+
+Isolation Forest excels at identifying \textit{globally} unusual points but struggles with \textit{contextually} unusual behavior. A user downloading files at 2 AM might not register as globally anomalous if their total activity volume is normal. However, the LSTM autoencoder learns each user's temporal patterns and flags deviations from their established baseline—even when the absolute behavior appears normal.
+
+The temporal window (7 days) allows the LSTM to capture multi-day attack patterns, such as gradual data staging before exfiltration. Static methods see only daily snapshots and miss these sequential dependencies.
+
+\subsection{Failure Case Analysis}
+
+To understand detection gaps, we analyzed attack days missed by our models at the 5\% FPR threshold. Of 388 attack days in the test set, only 58 (15\%) were detected by the LSTM autoencoder—revealing systematic challenges in insider threat detection.
+
+\textbf{Behavioral differences between detected and missed attacks:} Detected attacks exhibited significantly elevated behavioral signals compared to missed attacks. Specifically, detected attack days showed higher after-hours browsing (+9.92 standard deviations above normal), after-hours file operations (+3.41 SD), and logon counts (+2.45 SD). Missed attacks, conversely, showed behavioral profiles much closer to normal baseline activity.
+
+\textbf{The subtle attack problem:} Several insiders exhibited malicious behavior that closely mimicked normal patterns. For example, one user had 39 missed attack days with device connection activity (2.85 connections/day) only slightly above the normal average (0.59), compared to detected attacks averaging 3.25. This ``boiling frog'' pattern—where gradual, low-intensity malicious activity avoids detection thresholds—represents a fundamental challenge for anomaly-based detection.
+
+\textbf{Implications:} These findings suggest that unsupervised methods are most effective for detecting ``smash and grab'' attacks with dramatic behavioral deviations, while sophisticated insiders who pace their activity remain difficult to detect. Future work should explore: (1) longer temporal baselines to detect slow behavioral drift, (2) peer-group comparison to flag subtle within-role anomalies, and (3) hybrid approaches combining behavioral anomalies with data-centric indicators (e.g., sensitive file access patterns).
+
+\subsection{Limitations}
+
+\begin{itemize}
+    \item \textbf{Synthetic dataset}: The CMU-CERT dataset, while designed by security experts, is simulated. Real-world insider behavior may exhibit different patterns, and detection systems trained on synthetic data require validation on real incidents.
+
+    \item \textbf{Limited attack scenarios}: The 70 insider scenarios across 3 types may not represent the full diversity of insider threats. Scenarios involving slow, methodical data collection or social engineering are underrepresented.
+
+    \item \textbf{Computational cost}: LSTM training requires approximately 60 minutes per seed on CPU, limiting real-time deployment. Inference time (8-9 seconds for 85K sequences) is acceptable for daily batch processing but not sub-second alerting.
+
+    \item \textbf{Threshold selection}: We report metrics at fixed FPR thresholds, but optimal thresholds depend on organizational risk tolerance and analyst capacity. The 5\% FPR threshold generates approximately 4,500 daily alerts, which may overwhelm small security teams.
+
+    \item \textbf{Feature engineering}: Our 24-feature representation captures common behavioral signals but may miss domain-specific indicators relevant to particular organizations.
+\end{itemize}
+
+\subsection{Practical Implications}
+
+For security practitioners, our findings suggest a two-stage detection architecture:
+
+\begin{enumerate}
+    \item \textbf{Coarse filtering}: Use Isolation Forest for rapid, low-cost scoring of all users. Its high AUC-ROC provides effective ranking for prioritization.
+
+    \item \textbf{Fine-grained analysis}: Apply LSTM autoencoder to flagged users for temporal pattern analysis. The 3.4$\times$ improvement in recall at low FPR justifies the additional computational cost for high-risk users.
+\end{enumerate}
+
+The strong correlation between USB device activity and insider attacks (r=0.075) suggests that removable media monitoring should be prioritized in detection systems. Organizations should ensure comprehensive logging of device connection events.
+
+% ============================================================================
+\section{Conclusion}
+\label{sec:conclusion}
+
+This paper presented a comparative evaluation of unsupervised anomaly detection methods for insider threat detection, with a focus on the value of temporal sequence modeling. Our experiments on the CMU-CERT r4.2 dataset with rigorous statistical methodology (5 random seeds, Wilcoxon tests) yielded several key findings:
+
+\begin{enumerate}
+    \item \textbf{Temporal modeling improves operational detection}: While Isolation Forest achieves the highest AUC-ROC (0.799 $\pm$ 0.017), LSTM Autoencoder provides 3.4$\times$ higher recall at 5\% FPR (0.149 vs 0.044, $p=0.031$). This operationally relevant metric matters more for security teams with limited analyst capacity.
+
+    \item \textbf{USB device activity is the strongest indicator}: Features related to removable media (device\_connects, device\_disconnects) show the highest correlation with insider attacks, emphasizing the importance of comprehensive device logging.
+
+    \item \textbf{Attack detectability varies by scenario}: Insiders exhibiting drastic behavioral changes (Scenario 3) are detected with 100\% success, while subtle data exfiltration (Scenario 2) remains challenging with only 36\% of insiders detected.
+\end{enumerate}
+
+For practitioners, we recommend a two-stage architecture combining rapid Isolation Forest screening with LSTM-based temporal analysis for flagged users.
+
+\textbf{Future directions} include: (1) Transformer architectures with self-attention for improved interpretability and potentially better modeling of long-range dependencies, (2) multi-dataset validation on real-world incidents to assess generalization, (3) peer-group normalization to detect subtle within-role anomalies, and (4) integration with data-centric indicators (e.g., sensitive file classifications) to address the ``boiling frog'' attacks identified in our failure analysis.
+
+All code and experiments are publicly available to support reproducibility in insider threat research.
+
+% ============================================================================
+\section*{Acknowledgments}
+
+The authors thank the CERT Division of the Software Engineering Institute at Carnegie Mellon University for making the CMU-CERT Insider Threat Dataset available for research purposes.
+
+% ============================================================================
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}

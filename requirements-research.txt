@@ -1,0 +1,165 @@
+# =============================================================================
+# Insider Threat Detection Research - Python Dependencies
+# =============================================================================
+#
+# Author: Bipin Rimal
+# Created: 2025
+# Python Version: 3.11 (REQUIRED)
+#
+# Installation:
+#   pip install -r requirements-research.txt
+#
+# Platform Notes:
+#   - macOS (Apple Silicon): Use as-is
+#   - macOS (Intel): Replace tensorflow-macos with tensorflow==2.15.0
+#   - Linux/Windows: Replace tensorflow-macos with tensorflow==2.15.0
+#
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# CORE DATA PROCESSING
+# These are essential for loading and manipulating the CMU-CERT dataset
+# -----------------------------------------------------------------------------
+
+# NumPy: Foundation for numerical computing
+# Used for: Array operations, matrix math, statistical computations
+numpy==1.26.4
+
+# Pandas: Traditional DataFrame operations
+# Used for: Initial data loading, compatibility with some sklearn functions
+pandas==2.3.3
+
+# Polars: High-performance DataFrame library (10-100x faster than pandas)
+# Used for: Large-scale data processing, feature engineering
+# Why Polars? The CMU-CERT dataset has millions of rows; Polars handles this efficiently
+polars==1.36.0
+
+# -----------------------------------------------------------------------------
+# MACHINE LEARNING
+# Classical ML algorithms for baseline comparisons
+# -----------------------------------------------------------------------------
+
+# Scikit-learn: Industry-standard ML library
+# Used for:
+#   - Isolation Forest (anomaly detection baseline)
+#   - PCA (dimensionality reduction, reconstruction-based anomaly detection)
+#   - StandardScaler (feature normalization)
+#   - train_test_split (data splitting)
+#   - Evaluation metrics (roc_auc_score, precision_recall_curve)
+scikit-learn==1.7.2
+
+# SciPy: Scientific computing
+# Used for: Statistical tests (Wilcoxon signed-rank), sparse matrices
+scipy==1.16.3
+
+# -----------------------------------------------------------------------------
+# DEEP LEARNING
+# Neural network models (Dense Autoencoder, LSTM Autoencoder)
+# -----------------------------------------------------------------------------
+
+# TensorFlow for macOS (Apple Silicon optimized)
+# Used for: Building and training neural networks
+# Note: Replace with tensorflow==2.15.0 for Linux/Windows
+tensorflow-macos==2.15.0
+
+# TensorFlow Metal plugin (Apple Silicon GPU acceleration)
+# Used for: Hardware acceleration on M1/M2/M3 Macs
+# Note: Remove this line for Linux/Windows
+tensorflow-metal==1.1.0
+
+# -----------------------------------------------------------------------------
+# VISUALIZATION
+# Creating publication-quality figures for the paper
+# -----------------------------------------------------------------------------
+
+# Matplotlib: Core plotting library
+# Used for: ROC curves, bar charts, line plots
+matplotlib==3.10.0
+
+# Seaborn: Statistical visualization (built on matplotlib)
+# Used for: Heatmaps, styled plots, color palettes
+seaborn==0.13.2
+
+# -----------------------------------------------------------------------------
+# JUPYTER SUPPORT (Optional)
+# For interactive data exploration and debugging
+# -----------------------------------------------------------------------------
+
+# Jupyter: Interactive notebooks
+# Used for: Exploratory data analysis, debugging
+jupyter>=1.0.0
+ipykernel>=6.0.0
+
+# -----------------------------------------------------------------------------
+# TESTING & CODE QUALITY
+# Ensuring code correctness and maintainability
+# -----------------------------------------------------------------------------
+
+# Pytest: Testing framework
+# Used for: Unit tests, integration tests
+pytest>=7.0.0
+pytest-cov>=4.0.0
+
+# Black: Code formatter
+# Used for: Consistent code style
+black>=23.0.0
+
+# isort: Import sorter
+# Used for: Organizing imports
+isort>=5.0.0
+
+# MyPy: Static type checker
+# Used for: Type hint validation
+mypy>=1.0.0
+
+# -----------------------------------------------------------------------------
+# UTILITIES
+# Helper libraries for better development experience
+# -----------------------------------------------------------------------------
+
+# TQDM: Progress bars
+# Used for: Long-running operations (training, data processing)
+tqdm>=4.65.0
+
+# Joblib: Parallel processing
+# Used by: scikit-learn for parallelization
+joblib>=1.3.0
+
+# =============================================================================
+# VERSION COMPATIBILITY NOTES
+# =============================================================================
+#
+# TensorFlow 2.15.0:
+#   - Last version with full macOS support
+#   - Compatible with Python 3.11
+#   - Uses Keras 2.x API (not Keras 3.x)
+#
+# NumPy 1.26.4:
+#   - Compatible with TensorFlow 2.15.0
+#   - Stable release for scientific computing
+#
+# Scikit-learn 1.7.2:
+#   - Latest stable release
+#   - Improved Isolation Forest performance
+#
+# Polars 1.36.0:
+#   - Significant performance improvements
+#   - Stable API for data manipulation
+#
+# =============================================================================
+# TROUBLESHOOTING
+# =============================================================================
+#
+# Issue: TensorFlow won't install
+# Solution: Ensure Python 3.11 (not 3.12+), upgrade pip
+#
+# Issue: Import errors after install
+# Solution: Deactivate and reactivate virtual environment
+#
+# Issue: tensorflow-metal causes crashes
+# Solution: export CUDA_VISIBLE_DEVICES="" to disable GPU
+#
+# Issue: Memory errors during training
+# Solution: Reduce batch_size in src/config.py
+#
+# =============================================================================

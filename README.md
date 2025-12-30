@@ -1,328 +1,494 @@
-# Insider Threat Detection System
+# Insider Threat Detection Using Unsupervised Temporal Behavioral Profiling
 
-**Unsupervised Behavioral Profiling for Insider Threat Detection Using Time-Series and Anomaly Detection Techniques**
-
-A machine learning system for detecting insider threats through behavioral analysis using three complementary unsupervised models: Isolation Forest, LSTM Autoencoder, and Deep Clustering.
-
-## 🎯 Project Overview
-
-This system implements unsupervised learning techniques to detect malicious insider activity within enterprise environments by:
-
-- Analyzing user behavior patterns across multiple data sources (logon, file access, email, device usage, HTTP)
-- Detecting anomalies without requiring labeled training data
-- Combining multiple detection models in an ensemble for improved accuracy
-- Privacy-preserving design through SHA-256 pseudonymization
-
-## 📊 System Architecture
-
-```
-Raw Logs → Preprocessing → Feature Engineering → Model Training → Ensemble → Visualization
-           (Stage 1)       (Stage 2)             (Stage 3)         (Stage 4-5) (Stage 6)
-```
-
-### Pipeline Stages
-
-| Stage | Name | Script | Description |
-|-------|------|--------|-------------|
-| 1 | Data Preprocessing | `data_preprocessing_polars.py` | Load and clean CMU-CERT logs using Polars LazyFrames |
-| 2 | Feature Engineering | `feature_engineering_polars.py` | Generate daily behavioral features and sequences |
-| 3 | Model Training | `isolation_forest_model.py`, `lstm_autoencoder_model.py`, `deep_clustering_model.py` | Train unsupervised anomaly detection models |
-| 4 | Model Evaluation | `model_evaluation.py` | Compare model performance with metrics and plots |
-| 5 | Ensemble Integration | `ensemble_system.py` | Combine models using weighted, majority, or cascade voting |
-| 6 | Visualization | `visualization.py` | Generate comprehensive result visualizations |
-
-### Models Implemented
-
-| Model | Technique | Purpose |
-|-------|-----------|---------|
-| **Isolation Forest** | Random tree-based isolation | Fast screening for point anomalies in high-dimensional spaces |
-| **LSTM Autoencoder** | Sequence reconstruction | Detect temporal behavior pattern deviations |
-| **Deep Clustering** | Autoencoder + KMeans | Behavioral profiling through joint feature learning and clustering |
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Python 3.11+ (see `.python-version`)
-- ~4GB RAM minimum for processing
-
-### Installation
-
-```bash
-# Clone the repository
-git clone <your-repo-url>
-cd Thesis_work
-
-# Create virtual environment
-python -m venv .venv_tf
-source .venv_tf/bin/activate  # On Windows: .venv_tf\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-```
-
-### Data Setup
-
-1. Download the **CMU-CERT Insider Threat Dataset** (r1 subset) from:  
-   https://kilthub.cmu.edu/articles/dataset/Insider_Threat_Test_Dataset/12841247
-2. Extract to `data/all_data/r1/` directory
-3. Ensure the following files are present:
-   ```
-   data/all_data/r1/
-   ├── logon.csv
-   ├── device.csv
-   ├── file.csv
-   ├── email.csv
-   ├── http.csv
-   └── LDAP/
-   ```
-
-### Running the Pipeline
-
-**Option 1: Run Complete Pipeline**
-```bash
-python main.py --full
-```
-
-**Option 2: Run Specific Stages**
-```bash
-# Run only preprocessing and feature engineering
-python main.py --stages 1 2
-
-# Skip already completed stages
-python main.py --full --skip 1 2
-```
-
-**Option 3: Run Individual Stages**
-```bash
-python main.py --preprocess      # Stage 1
-python main.py --feature-eng     # Stage 2
-python main.py --train           # Stage 3
-python main.py --evaluate        # Stage 4
-```
-
-**Option 4: Run Scripts Directly**
-```bash
-python data_preprocessing_polars.py
-python feature_engineering_polars.py
-python isolation_forest_model.py
-python lstm_autoencoder_model.py
-python deep_clustering_model.py
-python model_evaluation.py
-python ensemble_system.py
-python visualization.py
-```
-
-## 📁 Project Structure
-
-```
-Thesis_work/
-├── main.py                        # Main pipeline orchestrator (6 stages)
-├── config.py                      # Configuration and hyperparameters
-├── utils.py                       # Utility functions (logging, metrics, I/O)
-│
-├── data_preprocessing_polars.py   # Stage 1: Data loading/cleaning (Polars)
-├── feature_engineering_polars.py  # Stage 2: Feature creation (Polars)
-├── isolation_forest_model.py      # Model: Isolation Forest
-├── lstm_autoencoder_model.py      # Model: LSTM Autoencoder
-├── deep_clustering_model.py       # Model: Deep Clustering (AE + KMeans)
-├── model_evaluation.py            # Stage 4: Model comparison
-├── ensemble_system.py             # Stage 5: Ensemble integration
-├── visualization.py               # Stage 6: Results visualization
-│
-├── requirements.txt               # Python dependencies
-├── README.md                      # This file
-│
-├── data/
-│   ├── all_data/r1/               # Raw CMU-CERT dataset files
-│   └── processed/                 # Intermediate processed data
-│
-├── models/                        # Trained model files (.pkl, .keras)
-├── results/                       # Predictions, metrics, alerts
-├── logs/                          # Execution logs
-│
-└── legacy/                        # Archived files (safe to ignore)
-    ├── deprecated_versions/       # Old model/evaluation versions
-    ├── debug_scripts/             # Diagnostic and test scripts
-    ├── one_off_utilities/         # Data labeling, patching scripts
-    └── thesis_specific/           # Thesis visualization scripts
-```
-
-## ⚙️ Configuration
-
-All configuration is centralized in `config.py`. Key parameters include:
-
-### Data Settings
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `DATASET_SUBSET` | CMU-CERT datasets to process | `['r1']` |
-| `TRAIN_RATIO` / `VAL_RATIO` / `TEST_RATIO` | Data split ratios | 0.7 / 0.15 / 0.15 |
-| `SEQUENCE_LENGTH` / `SEQUENCE_STRIDE` | LSTM sequence generation | 15 / 10 |
-| `MAX_SEQUENCE_SAMPLES` | Debug sample limit | `None` (full dataset) |
-
-### Model Parameters
-
-**Isolation Forest:**
-- `n_estimators`: 50, `contamination`: auto
-
-**LSTM Autoencoder:**
-- `lstm_units`: [32, 16], `epochs`: 20, `patience`: 5
-
-**Deep Clustering:**
-- `n_clusters`: 5, `encoding_dims`: [64, 32], `epochs`: 10
-
-### Ensemble Settings
-```python
-ENSEMBLE = {
-    'weights': {
-        'isolation_forest': 0.3,
-        'lstm_autoencoder': 0.4,
-        'deep_clustering': 0.3
-    },
-    'final_threshold': 0.7
-}
-```
-
-> **Note:** Current config processes full dataset with production-level epochs. For faster testing, set `DATASET_SUBSET = ['r1']` and reduce epochs.
-
-## 📈 Experimental Results
-
-### Latest Performance (CMU-CERT Dataset r1-r4.1, with Z-Score Features)
-
-**Dataset Statistics:**
-- **Total Records Processed:** 103,242,062 events
-- **Insider Users Identified:** 7 (from ground truth)
-- **Malicious Records Labeled:** 20,812 (0.02% of total)
-- **Users Analyzed:** 7,999
-- **Daily Feature Vectors:** 2,654,790 (26 features including Z-scores)
-- **Sequence Samples:** 2,542,814 (shape: 15 timesteps × 23 features)
-
-**Model Performance:**
-
-| Model | Accuracy | Precision | Recall | F1-Score | AUC-ROC |
-|-------|----------|-----------|--------|----------|---------|
-| **LSTM Autoencoder** 🏆 | 95.0% | 0.07% | **56.5%** | 0.14% | **0.94** |
-| Transformer Autoencoder | 94.9% | 0.07% | 50.0% | 0.14% | 0.90 |
-| Deep Clustering | 95.0% | 0.03% | 26.1% | 0.06% | 0.85 |
-| Isolation Forest | 91.3% | 0.03% | **44.7%** | 0.06% | 0.84 |
-
-**Z-Score Feature Impact (vs Previous Run):**
-| Model | Previous AUC | New AUC | Improvement |
-|-------|-------------|---------|-------------|
-| Isolation Forest | 0.78 | **0.84** | **+6%** |
-| LSTM Autoencoder | 0.93 | **0.94** | +1% |
-| Deep Clustering | 0.84 | **0.85** | +1% |
-
-### Understanding These Results
-
-**Why is Precision so low?**  
-This is expected! With only **0.02% of records being malicious**, even a perfect model would have many false positives. This is the "base rate fallacy" in rare-event detection. The key metric is **AUC-ROC**, which measures ranking quality.
-
-**What does AUC-ROC = 0.93 mean?**  
-If you randomly pick one insider and one normal user, there's a 93% chance the model will correctly rank the insider as more anomalous. This is excellent for unsupervised detection.
-
-**What does 56.5% Recall mean?**  
-The LSTM caught **~4 out of 7 insider attacks** without any labeled training data. For sophisticated insider threats, this is a strong result.
-
-**Key Finding:**  
-The **LSTM Autoencoder significantly outperforms** static models (Isolation Forest, Deep Clustering), validating the thesis hypothesis that **temporal sequence analysis is crucial for insider threat detection**.
-
-### Ablation Study Results
-
-**Z-Score Feature Impact:**
-| Configuration | AUC-ROC | Change |
-|---------------|---------|--------|
-| Without Z-scores | 0.50 | (random) |
-| With Z-scores | **0.87** | **+37%** |
-
-**Top 3 Most Important Features:**
-1. `daily_activity_count_peer_zscore` (+0.031 AUC impact)
-2. `daily_activity_count_self_zscore` (+0.029 AUC impact)
-3. `file_access_count_self_zscore` (+0.015 AUC impact)
-
-**Insight:** Insiders deviate most in their **overall activity volume** compared to their baseline and peers. This validates the context-aware Z-score approach.
-
-### Operational Impact
-- **Raw Events:** 103M+ → **Alerts Generated:** ~9,600
-- **Reduction:** 99.99% noise filtered
-- **Alert Priority:** 259 critical, 1,165 high, 1,556 medium, 6,654 low
-
-## 🔍 Output Files
-
-### Predictions
-- `results/isolation_forest_predictions.csv` — User, day, prediction, anomaly_score
-- `results/lstm_autoencoder_predictions.csv`
-- `results/deep_clustering_predictions.csv`
-- `results/ensemble_results.csv` — Combined ensemble predictions
-
-### Alerts
-- `results/alerts.csv` — Final actionable alerts with severity levels (low/medium/high/critical)
-
-### Visualizations
-- `results/plots/` — ROC curves, confusion matrices, score distributions, executive summary
-
-## 🛡️ Privacy & Ethics
-
-This system implements privacy-by-design principles:
-
-- **Data Pseudonymization**: User identifiers hashed using SHA-256 with configurable salt
-- **Minimal Data Collection**: Only behavioral metadata is processed, not content
-- **Configurable Privacy Settings**: See `PRIVACY` config in `config.py`
-
-## 🔬 Research Background
-
-This implementation is based on the thesis:  
-**"Unsupervised Behavioural Profiling for Insider Threat Detection Using Time-Series and Anomaly Detection Techniques"**
-
-Key findings:
-- **LSTM Autoencoder outperforms static models** (AUC 0.93 vs 0.78 for Isolation Forest)
-- Temporal sequence modeling is **crucial** for detecting complex insider threats
-- Unsupervised approaches can achieve **56% recall** without labeled training data
-- Privacy-preserving design through SHA-256 pseudonymization
-
-> 📄 **For publication guidance**, see [research.md](research.md) — includes paper structure, target venues, and improvement suggestions.
-
-## 📚 Key Dependencies
-
-| Package | Version | Purpose |
-|---------|---------|---------|
-| polars | ≥0.20.0 | High-performance data processing |
-| tensorflow | ≥2.15.0 | LSTM Autoencoder, Deep Clustering |
-| scikit-learn | ≥1.3.0 | Isolation Forest, metrics |
-| pandas | ≥2.0.0 | Data manipulation |
-| matplotlib/seaborn | ≥3.7.0/0.12.0 | Visualization |
-
-## 🆘 Troubleshooting
-
-### Common Issues
-
-**Issue**: `FileNotFoundError: No data files found`  
-**Solution**: Ensure CMU-CERT dataset is in `data/all_data/r1/` directory
-
-**Issue**: `MemoryError during training`  
-**Solution**: Reduce `MAX_SEQUENCE_SAMPLES` in `config.py`
-
-**Issue**: `TensorFlow compatibility errors`  
-**Solution**: Ensure TensorFlow ≥2.15.0: `pip install --upgrade tensorflow`
-
-**Issue**: Poor model performance  
-**Solution**: Increase `epochs` in config (currently set to debug mode)
-
-### Getting Help
-
-1. Check logs in `logs/insider_threat_detection.log`
-2. Enable verbose mode: Set `LOGGING['level'] = 'DEBUG'` in config
-3. Run stages individually to isolate issues
-
-## 👤 Author
-
-**Bipin Rimal**  
-Module: Computing Individual Research Project (STW7048CEM)
-
-## 📄 License
-
-This project is for academic research purposes. Please cite appropriately if used in publications.
+A rigorous comparative study of unsupervised anomaly detection methods for detecting insider threats in organizational networks. This research demonstrates that **temporal sequence modeling (LSTM Autoencoder) achieves 3.4x higher detection rates than static methods at operationally relevant thresholds**.
 
 ---
 
-**Note**: This system is designed for research and educational purposes. Deployment in production environments should include additional security hardening, compliance reviews, and stakeholder approval.
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Key Findings](#key-findings)
+3. [Project Structure](#project-structure)
+4. [Installation](#installation)
+5. [Dataset Setup](#dataset-setup)
+6. [Running Experiments](#running-experiments)
+7. [Understanding the Code](#understanding-the-code)
+8. [Results](#results)
+9. [Troubleshooting](#troubleshooting)
+10. [Citation](#citation)
+
+---
+
+## Overview
+
+### What is Insider Threat Detection?
+
+**Insider threats** occur when individuals with legitimate access to an organization's systems (employees, contractors, partners) misuse that access to harm the organization. Unlike external hackers who must break in, insiders already have the keys—making their malicious activities extremely difficult to detect.
+
+### The Problem with Current Approaches
+
+Traditional security tools (firewalls, intrusion detection systems) focus on external threats. Machine learning approaches typically require **labeled examples** of insider attacks for training, but such labels are extremely rare in practice—most organizations have never experienced a confirmed insider incident.
+
+### Our Approach
+
+We investigate **unsupervised anomaly detection**—methods that learn "normal" behavior patterns and flag deviations without needing labeled attack examples. We specifically test the hypothesis that **temporal sequence modeling** (analyzing behavior over time) captures attack patterns that static methods miss.
+
+### Research Questions
+
+| RQ | Question |
+|----|----------|
+| **RQ1** | Can unsupervised anomaly detection effectively identify insider threats without labeled training data? |
+| **RQ2** | Does temporal sequence modeling improve detection compared to static methods? |
+| **RQ3** | Which behavioral features are most predictive of insider threat activity? |
+| **RQ4** | How robust are these methods across different insider attack scenarios? |
+
+---
+
+## Key Findings
+
+### Main Result
+
+| Model | AUC-ROC | Recall@5%FPR | Recall@10%FPR |
+|-------|---------|--------------|---------------|
+| Isolation Forest | **0.799 ± 0.017** | 0.044 ± 0.009 | 0.220 ± 0.025 |
+| PCA Reconstruction | 0.612 ± 0.000 | 0.049 ± 0.000 | 0.129 ± 0.000 |
+| Dense Autoencoder | 0.659 ± 0.016 | 0.048 ± 0.006 | 0.118 ± 0.009 |
+| **LSTM Autoencoder** | 0.770 ± 0.006 | **0.149 ± 0.021** | **0.254 ± 0.019** |
+
+**Key Insight**: While Isolation Forest achieves the highest AUC-ROC (overall ranking), LSTM Autoencoder detects **3.4x more attacks** at the 5% false positive rate—the threshold most relevant for security operations.
+
+### Why This Matters
+
+- **AUC-ROC** measures how well a model ranks anomalies overall
+- **Recall@5%FPR** measures how many true attacks are caught when limiting false alarms to 5% of normal users
+- Security teams have limited capacity to investigate alerts—**low FPR thresholds are operationally critical**
+
+### Additional Findings
+
+1. **USB device activity** is the strongest indicator of insider attacks (correlation: 0.075)
+2. **7-day temporal windows** are optimal; longer windows add noise without benefit
+3. **"Boiling frog" attacks** (gradual, subtle behavior) evade detection—85% of attacks missed
+
+---
+
+## Project Structure
+
+```
+Thesis_work/
+├── src/                           # Source code (modular, documented)
+│   ├── data/                      # Data loading and preprocessing
+│   │   ├── loader.py              # Load raw CMU-CERT CSV files
+│   │   ├── preprocessing.py       # Clean and filter data
+│   │   ├── features.py            # Extract 24 daily features
+│   │   ├── sequences.py           # Create temporal sequences
+│   │   └── splits.py              # Train/test splitting
+│   │
+│   ├── models/                    # Anomaly detection models
+│   │   ├── base.py                # Abstract base class
+│   │   ├── isolation_forest.py    # Isolation Forest detector
+│   │   ├── pca_anomaly.py         # PCA reconstruction detector
+│   │   ├── autoencoder.py         # Dense autoencoder
+│   │   ├── lstm_autoencoder.py    # LSTM autoencoder (temporal)
+│   │   └── transformer_autoencoder.py  # Transformer (experimental)
+│   │
+│   ├── experiments/               # Experiment infrastructure
+│   │   ├── runner.py              # Multi-seed experiment runner
+│   │   ├── metrics.py             # Evaluation metrics
+│   │   └── visualizations.py      # Plot generation
+│   │
+│   ├── utils/                     # Utilities
+│   │   └── reproducibility.py     # Seed management
+│   │
+│   └── config.py                  # Hyperparameter configuration
+│
+├── paper/                         # LaTeX paper
+│   ├── main.tex                   # Paper manuscript
+│   ├── references.bib             # Bibliography (15+ citations)
+│   └── figures/                   # Generated visualizations
+│
+├── data/                          # Dataset (not tracked in git)
+│   ├── r4.2/                      # CMU-CERT r4.2 dataset
+│   │   ├── logon.csv              # Authentication events
+│   │   ├── device.csv             # USB device connections
+│   │   ├── file.csv               # File operations
+│   │   ├── email.csv              # Email metadata
+│   │   └── http.csv               # Web browsing
+│   └── answers/                   # Ground truth labels
+│       └── insiders.csv           # Insider threat scenarios
+│
+├── results/                       # Experiment outputs
+│   └── clean_experiments/         # Final results (JSON)
+│
+├── docs/                          # Additional documentation
+│   └── THESIS_DEFENSE_GUIDE.md    # Comprehensive explanation
+│
+├── run_experiments.py             # Main experiment script
+├── requirements-research.txt      # Python dependencies
+├── REPRODUCIBILITY.md             # Step-by-step reproduction guide
+└── README.md                      # This file
+```
+
+---
+
+## Installation
+
+### Prerequisites
+
+| Requirement | Version | Check Command |
+|-------------|---------|---------------|
+| Python | 3.11.x | `python3 --version` |
+| pip | 23.0+ | `pip --version` |
+| Git | 2.x | `git --version` |
+| 16GB RAM | - | Recommended for LSTM training |
+
+### Step 1: Clone the Repository
+
+```bash
+git clone <repository-url>
+cd Thesis_work
+```
+
+### Step 2: Create Virtual Environment
+
+```bash
+# Create isolated Python environment
+python3.11 -m venv .venv_tf
+
+# Activate it (run this every time you work on the project)
+source .venv_tf/bin/activate  # macOS/Linux
+# OR
+.venv_tf\Scripts\activate     # Windows
+```
+
+### Step 3: Install Dependencies
+
+```bash
+pip install --upgrade pip
+pip install -r requirements-research.txt
+```
+
+**Note for Apple Silicon (M1/M2/M3) users**: The requirements include TensorFlow optimized for Apple Silicon. If you encounter issues, see [Troubleshooting](#troubleshooting).
+
+**Note for Linux/Windows users**: Replace `tensorflow-macos` with `tensorflow` in requirements:
+```bash
+pip install tensorflow==2.15.0
+```
+
+### Step 4: Verify Installation
+
+```bash
+python -c "import tensorflow as tf; print(f'TensorFlow: {tf.__version__}')"
+python -c "import sklearn; print(f'Scikit-learn: {sklearn.__version__}')"
+python -c "from src.models import LSTMAutoencoder; print('Models imported successfully')"
+```
+
+---
+
+## Dataset Setup
+
+### About CMU-CERT Dataset
+
+The **CMU-CERT Insider Threat Dataset** is the standard benchmark for insider threat research, created by the CERT Division of Carnegie Mellon University.
+
+| Property | Value |
+|----------|-------|
+| Version | r4.2 |
+| Users | ~1,000 simulated employees |
+| Duration | 18 months of activity |
+| Insiders | 70 malicious users (3 scenario types) |
+| Events | Millions of log entries |
+
+### Download the Dataset
+
+1. Go to: https://kilthub.cmu.edu/articles/dataset/Insider_Threat_Test_Dataset/12841247
+2. Download the dataset archive (~2GB)
+3. Extract to the `data/` directory
+
+### Expected Directory Structure
+
+After extraction, your `data/` folder should look like:
+
+```
+data/
+├── r4.2/
+│   ├── logon.csv      # 32M - User login/logout events
+│   ├── device.csv     # 1.2M - USB device connections
+│   ├── file.csv       # 445M - File copy operations
+│   ├── email.csv      # 2.6G - Email send/receive
+│   └── http.csv       # 1.6G - Web browsing activity
+└── answers/
+    └── insiders.csv   # Ground truth: who are the insiders
+```
+
+### Verify Dataset
+
+```bash
+# Check files exist
+ls -la data/r4.2/
+ls -la data/answers/
+
+# Quick data check
+head -5 data/r4.2/logon.csv
+head -5 data/answers/insiders.csv
+```
+
+---
+
+## Running Experiments
+
+### Quick Test (Single Seed)
+
+To verify everything works:
+
+```bash
+# Run Isolation Forest with 1 seed (fastest, ~2 minutes)
+python run_experiments.py --model isolation_forest --quick
+```
+
+### Full Experiment Suite
+
+To reproduce all paper results:
+
+```bash
+# Run all 4 models with 5 random seeds each
+# WARNING: Takes ~4-5 hours (LSTM is slow on CPU)
+python run_experiments.py --all --seeds 5
+```
+
+### Individual Models
+
+```bash
+# Static methods (fast, ~5 min each)
+python run_experiments.py --model isolation_forest --seeds 5
+python run_experiments.py --model pca --seeds 5
+python run_experiments.py --model dense_autoencoder --seeds 5
+
+# Temporal method (slow, ~60 min per seed on CPU)
+python run_experiments.py --model lstm_autoencoder --seeds 5
+```
+
+### Custom Configuration
+
+```bash
+# Change sequence window size
+python run_experiments.py --model lstm_autoencoder --window 14
+
+# Use different dataset version
+python run_experiments.py --all --dataset r5.2
+
+# Custom output directory
+python run_experiments.py --all --output results/my_experiment
+```
+
+### Generate Visualizations
+
+After running experiments:
+
+```bash
+python -c "from src.experiments.visualizations import generate_all_plots; generate_all_plots()"
+```
+
+This creates:
+- `paper/figures/roc_curves.png` - ROC curves for all models
+- `paper/figures/model_comparison.png` - Bar charts comparing metrics
+- `paper/figures/seed_variance.png` - Variance across random seeds
+- `paper/figures/feature_importance.png` - Feature importance analysis
+
+---
+
+## Understanding the Code
+
+### Data Pipeline
+
+```
+Raw CSV Files → Preprocessing → Feature Engineering → Sequences → Train/Test Split
+```
+
+1. **Loading** (`src/data/loader.py`): Reads raw CSV files
+2. **Preprocessing** (`src/data/preprocessing.py`): Cleans data, filters inactive users
+3. **Features** (`src/data/features.py`): Extracts 24 daily behavioral features
+4. **Sequences** (`src/data/sequences.py`): Creates 7-day sliding windows for LSTM
+5. **Splits** (`src/data/splits.py`): Temporal train/test split (70%/30%)
+
+### Feature Categories (24 Features)
+
+| Category | Features | Description |
+|----------|----------|-------------|
+| **Logon (6)** | logon_count, logoff_count, after_hours_logons, unique_pcs, first_logon_hour, last_logoff_hour | Authentication patterns |
+| **Device (4)** | device_connects, device_disconnects, after_hours_connects, device_activity | USB/removable media usage |
+| **HTTP (5)** | http_requests, unique_domains, upload_actions, download_actions, after_hours_browsing | Web activity |
+| **Email (5)** | emails_sent, total_recipients, attachment_count, attachment_size, after_hours_emails | Email patterns |
+| **File (4)** | file_operations, file_copies, exe_access, after_hours_files | File access behavior |
+
+### Model Architecture
+
+#### Isolation Forest
+- Ensemble of 100 random trees
+- Anomaly score = average path length to isolate a point
+- Fast training and inference
+
+#### PCA Reconstruction
+- Projects data to principal components (95% variance retained)
+- Anomaly score = reconstruction error
+- No hyperparameters, deterministic
+
+#### Dense Autoencoder
+- Architecture: 24 → 64 → 32 → 16 → 32 → 64 → 24
+- Anomaly score = MSE reconstruction error
+- 50 epochs, early stopping
+
+#### LSTM Autoencoder
+- Encoder: LSTM(64) → LSTM(32) → Dense(16)
+- Decoder: Dense(16) → LSTM(32) → LSTM(64) → Output
+- Processes 7-day sequences
+- Captures temporal dependencies
+
+### Evaluation Metrics
+
+```python
+# AUC-ROC: Overall ranking ability (0-1, higher better)
+from sklearn.metrics import roc_auc_score
+auc = roc_auc_score(y_true, scores)
+
+# Recall@K%FPR: Detection rate at fixed false positive rate
+def recall_at_fpr(y_true, scores, target_fpr=0.05):
+    fpr, tpr, _ = roc_curve(y_true, scores)
+    idx = np.searchsorted(fpr, target_fpr)
+    return tpr[idx]
+```
+
+---
+
+## Results
+
+### Output Files
+
+After running experiments, find results in `results/clean_experiments/`:
+
+```
+results/clean_experiments/
+├── IsolationForest_results.json
+├── PCA_Reconstruction_results.json
+├── DenseAutoencoder_results.json
+├── LSTMAutoencoder_results.json
+└── sequence_ablation.json
+```
+
+### Result Format
+
+Each JSON file contains:
+
+```json
+{
+  "model_name": "LSTMAutoencoder",
+  "seeds": [42, 43, 44, 45, 46],
+  "auc_roc_mean": 0.770,
+  "auc_roc_std": 0.006,
+  "recall_5fpr_mean": 0.149,
+  "recall_5fpr_std": 0.021,
+  "per_seed_results": [...]
+}
+```
+
+### Compiling the Paper
+
+```bash
+cd paper
+
+# Full compilation (recommended)
+pdflatex main.tex
+bibtex main
+pdflatex main.tex
+pdflatex main.tex
+
+# Output: main.pdf (6 pages, IEEE conference format)
+```
+
+---
+
+## Troubleshooting
+
+### Common Issues
+
+#### "ModuleNotFoundError: No module named 'src'"
+
+```bash
+# Option 1: Run from project root
+cd /path/to/Thesis_work
+python run_experiments.py --all
+
+# Option 2: Add to Python path
+export PYTHONPATH="${PYTHONPATH}:$(pwd)"
+```
+
+#### TensorFlow Issues on Apple Silicon
+
+```bash
+# If TensorFlow Metal causes issues, disable it
+export CUDA_VISIBLE_DEVICES=""
+python run_experiments.py --all
+```
+
+#### Memory Errors
+
+LSTM training on 230K sequences requires significant memory:
+```bash
+# Reduce batch size in src/config.py
+# Default: batch_size = 32
+# Try: batch_size = 16
+```
+
+#### Dataset Not Found
+
+```bash
+# Verify paths
+ls data/r4.2/logon.csv
+ls data/answers/insiders.csv
+
+# If answers folder is elsewhere, create symlink
+ln -s /path/to/answers data/answers
+```
+
+#### Slow Training
+
+LSTM training takes ~60 minutes per seed on CPU. Options:
+1. Use GPU if available
+2. Run with fewer seeds: `--seeds 1`
+3. Use smaller dataset sample for debugging
+
+---
+
+## Citation
+
+If you use this code or findings in your research, please cite:
+
+```bibtex
+@article{rimal2025insider,
+  title={Unsupervised Temporal Behavioral Profiling for Insider Threat Detection: A Comparative Study},
+  author={Rimal, Bipin},
+  institution={Coventry University},
+  year={2025}
+}
+```
+
+---
+
+## Author
+
+**Bipin Rimal**
+Department of Computing
+Coventry University
+rimalb@uni.coventry.ac.uk
+
+---
+
+## License
+
+This code is released for **research purposes only**. The CMU-CERT dataset is subject to its own license terms from Carnegie Mellon University.
+
+---
+
+## Acknowledgments
+
+- CERT Division of the Software Engineering Institute at Carnegie Mellon University for the CMU-CERT Insider Threat Dataset
+- Coventry University for research support
