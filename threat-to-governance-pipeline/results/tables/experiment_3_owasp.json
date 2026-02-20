@@ -1,0 +1,100 @@
+{
+  "IsolationForest": {
+    "overall": {
+      "auc_roc": 0.8170891608391608,
+      "auc_pr": 0.5453869533166601,
+      "recall@5%FPR": 0.06818181818181818,
+      "recall@10%FPR": 0.20454545454545456,
+      "precision@5%FPR": 0.5,
+      "precision@10%FPR": 0.47368421052631576
+    },
+    "per_category": {
+      "ASI01": {
+        "auc_roc": 0.835576923076923,
+        "auc_pr": 0.20295782215876582,
+        "recall@10%FPR": 0.2,
+        "n_samples": 10
+      },
+      "ASI02": {
+        "auc_roc": 0.3798076923076923,
+        "auc_pr": 0.027872945775259533,
+        "recall@10%FPR": 0.0,
+        "n_samples": 4
+      },
+      "ASI05": {
+        "auc_roc": 0.8336538461538461,
+        "auc_pr": 0.3117339024239768,
+        "recall@10%FPR": 0.2,
+        "n_samples": 10
+      },
+      "ASI09": {
+        "auc_roc": 0.8846153846153846,
+        "auc_pr": 0.22673146580944567,
+        "recall@10%FPR": 0.25,
+        "n_samples": 8
+      },
+      "ASI10": {
+        "auc_roc": 0.8886217948717948,
+        "auc_pr": 0.30500201317349485,
+        "recall@10%FPR": 0.25,
+        "n_samples": 12
+      }
+    },
+    "blind_spots": [
+      "ASI03",
+      "ASI04",
+      "ASI06",
+      "ASI07",
+      "ASI08"
+    ]
+  },
+  "DeepClustering": {
+    "overall": {
+      "auc_roc": 0.775131118881119,
+      "auc_pr": 0.5501296775482601,
+      "recall@5%FPR": 0.20454545454545456,
+      "recall@10%FPR": 0.25,
+      "precision@5%FPR": 0.6923076923076923,
+      "precision@10%FPR": 0.5238095238095238
+    },
+    "per_category": {
+      "ASI01": {
+        "auc_roc": 0.8346153846153845,
+        "auc_pr": 0.20859615124440545,
+        "recall@10%FPR": 0.2,
+        "n_samples": 10
+      },
+      "ASI02": {
+        "auc_roc": 0.3004807692307693,
+        "auc_pr": 0.024411289596296695,
+        "recall@10%FPR": 0.0,
+        "n_samples": 4
+      },
+      "ASI05": {
+        "auc_roc": 0.7394230769230768,
+        "auc_pr": 0.2533977560646524,
+        "recall@10%FPR": 0.2,
+        "n_samples": 10
+      },
+      "ASI09": {
+        "auc_roc": 0.8533653846153846,
+        "auc_pr": 0.20474288992457892,
+        "recall@10%FPR": 0.375,
+        "n_samples": 8
+      },
+      "ASI10": {
+        "auc_roc": 0.8613782051282051,
+        "auc_pr": 0.4036406901587544,
+        "recall@10%FPR": 0.3333333333333333,
+        "n_samples": 12
+      }
+    },
+    "blind_spots": [
+      "ASI03",
+      "ASI04",
+      "ASI06",
+      "ASI07",
+      "ASI08"
+    ]
+  }
+}
