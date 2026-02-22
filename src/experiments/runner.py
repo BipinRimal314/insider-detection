@@ -179,6 +179,29 @@ def run_experiment(
     )
 
 
+def _aggregate_results(results: List[ExperimentResult], seeds: List[int]) -> AggregatedResults:
+    """Aggregate individual results into summary statistics."""
+    auc_rocs = [r.auc_roc for r in results]
+    auc_prs = [r.auc_pr for r in results]
+    recall_5s = [r.recall_at_5fpr for r in results]
+    recall_10s = [r.recall_at_10fpr for r in results]
+
+    return AggregatedResults(
+        model_name=results[0].model_name,
+        n_seeds=len(results),
+        seeds=seeds[:len(results)],
+        auc_roc_mean=np.mean(auc_rocs),
+        auc_roc_std=np.std(auc_rocs),
+        auc_pr_mean=np.mean(auc_prs),
+        auc_pr_std=np.std(auc_prs),
+        recall_at_5fpr_mean=np.mean(recall_5s),
+        recall_at_5fpr_std=np.std(recall_5s),
+        recall_at_10fpr_mean=np.mean(recall_10s),
+        recall_at_10fpr_std=np.std(recall_10s),
+        results=results,
+    )
+
+
 def run_multi_seed_experiment(
     model_class,
     model_kwargs: Dict[str, Any],
@@ -187,6 +210,7 @@ def run_multi_seed_experiment(
     y_test: np.ndarray,
     seeds: List[int] = None,
     verbose: bool = True,
+    save_dir: Optional[Path] = None,
 ) -> AggregatedResults:
     """
     Run experiments with multiple random seeds.
@@ -199,6 +223,7 @@ def run_multi_seed_experiment(
         y_test: Test labels.
         seeds: List of random seeds.
         verbose: Print progress.
+        save_dir: If provided, save results incrementally after each seed.
 
     Returns:
         AggregatedResults with mean/std across seeds.
@@ -220,28 +245,12 @@ def run_multi_seed_experiment(
         if verbose:
             print(f"AUC-ROC={result.auc_roc:.4f}")
 
-    # Aggregate
-    auc_rocs = [r.auc_roc for r in results]
-    auc_prs = [r.auc_pr for r in results]
-    recall_5s = [r.recall_at_5fpr for r in results]
-    recall_10s = [r.recall_at_10fpr for r in results]
+        # Save incrementally after each seed
+        if save_dir is not None:
+            agg = _aggregate_results(results, seeds)
+            save_results(agg, save_dir)
 
-    model_name = results[0].model_name
-
-    return AggregatedResults(
-        model_name=model_name,
-        n_seeds=len(seeds),
-        seeds=seeds,
-        auc_roc_mean=np.mean(auc_rocs),
-        auc_roc_std=np.std(auc_rocs),
-        auc_pr_mean=np.mean(auc_prs),
-        auc_pr_std=np.std(auc_prs),
-        recall_at_5fpr_mean=np.mean(recall_5s),
-        recall_at_5fpr_std=np.std(recall_5s),
-        recall_at_10fpr_mean=np.mean(recall_10s),
-        recall_at_10fpr_std=np.std(recall_10s),
-        results=results,
-    )
+    return _aggregate_results(results, seeds)
 
 
 def save_results(results: AggregatedResults, output_dir: Path) -> None:

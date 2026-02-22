@@ -60,7 +60,7 @@ def load_data(dataset_version: str = "r4.2", min_user_days: int = 30):
     return train_df, test_df, preprocessed["ground_truth"]
 
 
-def run_isolation_forest(X_train, X_test, y_test, seeds, verbose=True):
+def run_isolation_forest(X_train, X_test, y_test, seeds, verbose=True, save_dir=None):
     """Run Isolation Forest experiments."""
     from src.models.isolation_forest import IsolationForestDetector
 
@@ -74,10 +74,11 @@ def run_isolation_forest(X_train, X_test, y_test, seeds, verbose=True):
         X_train, X_test, y_test,
         seeds=seeds,
         verbose=verbose,
+        save_dir=save_dir,
     )
 
 
-def run_pca(X_train, X_test, y_test, seeds, verbose=True):
+def run_pca(X_train, X_test, y_test, seeds, verbose=True, save_dir=None):
     """Run PCA Reconstruction experiments."""
     from src.models.pca_anomaly import PCAAnomalyDetector
 
@@ -91,10 +92,11 @@ def run_pca(X_train, X_test, y_test, seeds, verbose=True):
         X_train, X_test, y_test,
         seeds=seeds,
         verbose=verbose,
+        save_dir=save_dir,
     )
 
 
-def run_dense_autoencoder(X_train, X_test, y_test, seeds, verbose=True):
+def run_dense_autoencoder(X_train, X_test, y_test, seeds, verbose=True, save_dir=None):
     """Run Dense Autoencoder experiments."""
     from src.models.autoencoder import DenseAutoencoder
 
@@ -113,10 +115,11 @@ def run_dense_autoencoder(X_train, X_test, y_test, seeds, verbose=True):
         X_train, X_test, y_test,
         seeds=seeds,
         verbose=verbose,
+        save_dir=save_dir,
     )
 
 
-def run_lstm_autoencoder(X_train_seq, X_test_seq, y_test_seq, seeds, verbose=True):
+def run_lstm_autoencoder(X_train_seq, X_test_seq, y_test_seq, seeds, verbose=True, save_dir=None):
     """Run LSTM Autoencoder experiments."""
     from src.models.lstm_autoencoder import LSTMAutoencoder
 
@@ -136,6 +139,7 @@ def run_lstm_autoencoder(X_train_seq, X_test_seq, y_test_seq, seeds, verbose=Tru
         X_train_seq, X_test_seq, y_test_seq,
         seeds=seeds,
         verbose=verbose,
+        save_dir=save_dir,
     )
 
 
@@ -192,13 +196,13 @@ def main():
 
     for model_name in models_to_run:
         if model_name == "isolation_forest":
-            results = run_isolation_forest(X_train, X_test, y_test, seeds)
+            results = run_isolation_forest(X_train, X_test, y_test, seeds, save_dir=output_dir)
         elif model_name == "pca":
-            results = run_pca(X_train, X_test, y_test, seeds)
+            results = run_pca(X_train, X_test, y_test, seeds, save_dir=output_dir)
         elif model_name == "dense_autoencoder":
-            results = run_dense_autoencoder(X_train, X_test, y_test, seeds)
+            results = run_dense_autoencoder(X_train, X_test, y_test, seeds, save_dir=output_dir)
         elif model_name == "lstm_autoencoder":
-            results = run_lstm_autoencoder(X_train_seq, X_test_seq, y_test_seq, seeds)
+            results = run_lstm_autoencoder(X_train_seq, X_test_seq, y_test_seq, seeds, save_dir=output_dir)
         else:
             print(f"Unknown model: {model_name}")
             continue

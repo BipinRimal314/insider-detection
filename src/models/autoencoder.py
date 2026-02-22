@@ -139,9 +139,8 @@ class DenseAutoencoder(StaticDetector):
 
         model = keras.Model(autoencoder_input, decoded, name="autoencoder")
 
-        # Use legacy optimizer for M1/M2 Mac compatibility
         model.compile(
-            optimizer=keras.optimizers.legacy.Adam(learning_rate=self.learning_rate),
+            optimizer=keras.optimizers.Adam(learning_rate=self.learning_rate),
             loss="mse",
         )
 

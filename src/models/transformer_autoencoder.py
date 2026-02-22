@@ -150,9 +150,8 @@ class TransformerAutoencoder(TemporalDetector):
 
         model = keras.Model(inputs, outputs, name="transformer_autoencoder")
 
-        # Use legacy optimizer for M1/M2 Mac compatibility
         model.compile(
-            optimizer=keras.optimizers.legacy.Adam(learning_rate=self.learning_rate),
+            optimizer=keras.optimizers.Adam(learning_rate=self.learning_rate),
             loss="mse",
         )
 

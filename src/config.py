@@ -24,7 +24,7 @@ class DataConfig:
     data_dir: Path = Path("data")
 
     # Dataset version to use (r1 is smallest, good for development)
-    dataset_version: str = "r1"
+    dataset_version: str = "r4.2"
 
     # Ground truth file mapping users to insider threat scenarios
     ground_truth_file: str = "answers/insiders.csv"
@@ -277,12 +277,14 @@ class Config:
 
     def __post_init__(self):
         """Set device based on availability."""
-        import torch
-        if torch.cuda.is_available():
-            self.device = "cuda"
-        elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
-            self.device = "mps"
-        else:
+        try:
+            import tensorflow as tf
+            gpus = tf.config.list_physical_devices("GPU")
+            if gpus:
+                self.device = "gpu"
+            else:
+                self.device = "cpu"
+        except ImportError:
             self.device = "cpu"
 
     def to_dict(self) -> dict:

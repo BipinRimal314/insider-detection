@@ -56,7 +56,8 @@ paper/*.fdb_latexmk
 paper/*.fls
 paper/*.synctex.gz
 
-# Folder
-
+# Old files
 conductor/
 docs/
+REPRODUCIBILITY.md
+requirements-research.txt
