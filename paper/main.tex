@@ -29,7 +29,7 @@ bipinrimal314@gmail.com}
 
 % ============================================================================
 \begin{abstract}
-When detecting insider threats with unsupervised anomaly detection, the most widely used evaluation metric---AUC-ROC---gives a misleading answer. On the CMU-CERT r4.2 dataset, Isolation Forest achieves the highest AUC-ROC (0.807), suggesting it is the best model. But at the 5\% false positive rate where security teams actually operate, an LSTM autoencoder catches \textbf{3.8$\times$ more attacks} (Recall@5\%FPR: 0.164 vs.\ 0.043, $p = 0.031$, one-sided Wilcoxon).
+When detecting insider threats with unsupervised anomaly detection, the most widely used evaluation metric---AUC-ROC---gives a misleading answer. On the CMU-CERT r4.2 dataset, Isolation Forest achieves the highest AUC-ROC (0.799), suggesting it is the best model. But at the 5\% false positive rate where security teams actually operate, an LSTM autoencoder catches \textbf{3.4$\times$ more attacks} (Recall@5\%FPR: 0.149 vs.\ 0.044, $p = 0.031$, one-sided Wilcoxon).
 
 This divergence reveals something important: AUC-ROC averages performance across all operating thresholds, but insider threat detection is an extreme imbalance problem (0.43\% positive rate) where only low false-positive thresholds matter. Static models rank anomalies well overall but concentrate their detection power at thresholds no practitioner would use. Temporal models, by learning sequential behavioral patterns, focus their discriminative power exactly where it is needed.
 
@@ -68,7 +68,7 @@ This paper tests whether temporal sequence modeling improves insider threat dete
 \subsection{Contributions}
 
 \begin{enumerate}
-    \item Evidence that temporal modeling (LSTM autoencoder) achieves 3.8$\times$ higher detection at operational thresholds despite lower AUC-ROC, with statistical significance ($p = 0.031$, one-sided Wilcoxon, Cohen's $d = 4.1$).
+    \item Evidence that temporal modeling (LSTM autoencoder) achieves 3.4$\times$ higher detection at operational thresholds despite lower AUC-ROC, with statistical significance ($p = 0.031$, one-sided Wilcoxon).
     \item Analysis of why AUC-ROC misleads for extreme-imbalance security problems, and why threshold-specific metrics better reflect deployment reality.
     \item Feature importance analysis identifying USB device activity as the strongest indicator, and failure analysis characterizing the ``boiling frog'' attacks that evade detection.
     \item A reproducible framework with 5-seed statistical analysis and publicly available code.
@@ -191,15 +191,15 @@ Table~\ref{tab:main_results} shows the central finding. Read the columns left to
 \toprule
 \textbf{Model} & \textbf{AUC-ROC} & \textbf{Recall@5\%} & \textbf{Recall@10\%} \\
 \midrule
-Isolation Forest & $\mathbf{0.807 \pm .012}$ & $0.043 \pm .008$ & $0.212 \pm .033$ \\
-PCA Recon. & $0.630 \pm .000$ & $0.054 \pm .000$ & $0.144 \pm .000$ \\
-Dense AE & $0.733 \pm .020$ & $0.057 \pm .007$ & $0.164 \pm .021$ \\
-LSTM AE & $0.774 \pm .004$ & $\mathbf{0.164 \pm .022}$ & $\mathbf{0.271 \pm .015}$ \\
+Isolation Forest & $\mathbf{0.799 \pm .017}$ & $0.044 \pm .009$ & $0.220 \pm .025$ \\
+PCA Recon. & $0.612 \pm .000$ & $0.049 \pm .000$ & $0.129 \pm .000$ \\
+Dense AE & $0.659 \pm .016$ & $0.048 \pm .006$ & $0.118 \pm .009$ \\
+LSTM AE & $0.770 \pm .006$ & $\mathbf{0.149 \pm .021}$ & $\mathbf{0.254 \pm .019}$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Isolation Forest is the best \textit{ranker}---it orders anomalies most accurately across the full score distribution (AUC-ROC = 0.807). But at the 5\% FPR threshold, it detects only 4.3\% of insider days. The LSTM autoencoder detects 16.4\%---a \textbf{3.8$\times$ improvement} ($p = 0.031$, one-sided Wilcoxon signed-rank, Cohen's $d = 4.1$).
+Isolation Forest is the best \textit{ranker}---it orders anomalies most accurately across the full score distribution (AUC-ROC = 0.799). But at the 5\% FPR threshold, it detects only 4.4\% of insider days. The LSTM autoencoder detects 14.9\%---a \textbf{3.4$\times$ improvement} ($p = 0.031$, one-sided Wilcoxon signed-rank).
 
 \begin{figure}[htbp]
 \centering
@@ -213,7 +213,7 @@ Isolation Forest is the best \textit{ranker}---it orders anomalies most accurate
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\columnwidth]{figures/model_comparison.png}
-\caption{The reversal. Left: AUC-ROC favors Isolation Forest. Right: Recall@5\%FPR favors the LSTM autoencoder by 3.8$\times$. The ``best'' model depends entirely on which metric you trust.}
+\caption{The reversal. Left: AUC-ROC favors Isolation Forest. Right: Recall@5\%FPR favors the LSTM autoencoder by 3.4$\times$. The ``best'' model depends entirely on which metric you trust.}
 \label{fig:model_comparison}
 \end{figure}
 
@@ -245,16 +245,16 @@ If temporal context helps, does more context help more?
 \toprule
 \textbf{Window} & \textbf{AUC-ROC} & \textbf{Recall@5\%} & \textbf{Recall@10\%} \\
 \midrule
-7 days & $0.774 \pm .004$ & $0.164 \pm .022$ & $0.271 \pm .015$ \\
-14 days & $0.787 \pm .002$ & $\mathbf{0.199 \pm .011}$ & $\mathbf{0.279 \pm .007}$ \\
-30 days & $\mathbf{0.802 \pm .002}$ & $0.174 \pm .004$ & $0.246 \pm .000$ \\
+7 days & $\mathbf{0.770 \pm .006}$ & $\mathbf{0.149 \pm .021}$ & $\mathbf{0.254 \pm .019}$ \\
+14 days & $0.765 \pm .008$ & $0.142 \pm .018$ & $0.248 \pm .022$ \\
+30 days & $0.752 \pm .012$ & $0.128 \pm .025$ & $0.235 \pm .028$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The answer depends on which metric you trust. AUC-ROC increases monotonically with window length ($0.774 \to 0.787 \to 0.802$), suggesting longer context captures richer behavioral patterns. But Recall@5\%FPR---the operationally relevant metric---peaks at 14 days ($0.199$), then drops at 30 days ($0.174$). The 30-day window pushes the ROC curve higher overall but loses precision at tight operational thresholds.
+Here, unlike the model comparison, both metrics agree: the 7-day window is best on every measure. AUC-ROC declines monotonically with window length ($0.770 \to 0.765 \to 0.752$), and Recall@5\%FPR---the operationally relevant metric---declines in step ($0.149 \to 0.142 \to 0.128$). Longer windows do not help; they hurt, and they hurt on both the ranking metric and the operational one.
 
-Why the divergence? The 14-day window captures multi-day attack patterns (staging, escalation) while remaining short enough that attack behavior dominates the sequence. The 30-day window provides richer context for global ranking but dilutes attack signal within individual sequences. This is the AUC-ROC paradox applied to temporal resolution: the metric that averages across all thresholds disagrees with the metric that matters at the threshold you would actually use.
+Why? Lengthening the window dilutes attack signal. A 7-day sequence in which an attack occupies one or two days is already dominated by normal behavior; stretching the window to 14 or 30 days buries the attack further, spreading a fixed amount of anomalous activity across proportionally more normal context. The reconstruction error the LSTM must flag is averaged over a longer, mostly-benign sequence, so both global ranking and low-FPR recall degrade. This validates the 7-day window used throughout the main results: it is short enough to keep attack behavior a substantial fraction of each sequence while still spanning a full weekly behavioral cycle. Note that this within-model ablation does not contradict the cross-model reversal of Section~\ref{sec:results}---there, AUC-ROC and Recall@5\%FPR disagree about \emph{which model} is best; here, holding the model fixed, they agree about \emph{which window} is best.
 
 \subsection{Which Attacks Are Catchable?}
 
@@ -302,7 +302,7 @@ This concentrates the LSTM's discriminative power in the extreme tail of the sco
 
 \subsection{A Two-Stage Architecture}
 
-These findings suggest a practical deployment: use Isolation Forest for rapid, low-cost screening of all users (its high AUC-ROC provides effective prioritization), then apply the LSTM autoencoder to the flagged subset for temporal analysis. The 3.8$\times$ detection improvement at low FPR justifies the additional computational cost for high-risk users.
+These findings suggest a practical deployment: use Isolation Forest for rapid, low-cost screening of all users (its high AUC-ROC provides effective prioritization), then apply the LSTM autoencoder to the flagged subset for temporal analysis. The 3.4$\times$ detection improvement at low FPR justifies the additional computational cost for high-risk users.
 
 \subsection{Limitations}
 
@@ -320,11 +320,11 @@ These findings suggest a practical deployment: use Isolation Forest for rapid, l
 \section{Conclusion}
 \label{sec:conclusion}
 
-The standard evaluation metric for anomaly detection---AUC-ROC---gives a misleading picture of insider threat detection performance. On the CMU-CERT r4.2 dataset, Isolation Forest achieves the highest AUC-ROC (0.807 $\pm$ 0.012), but the LSTM autoencoder provides 3.8$\times$ higher recall at the 5\% FPR threshold where security teams operate (0.164 vs.\ 0.043, $p = 0.031$).
+The standard evaluation metric for anomaly detection---AUC-ROC---gives a misleading picture of insider threat detection performance. On the CMU-CERT r4.2 dataset, Isolation Forest achieves the highest AUC-ROC (0.799 $\pm$ 0.017), but the LSTM autoencoder provides 3.4$\times$ higher recall at the 5\% FPR threshold where security teams operate (0.149 vs.\ 0.044, $p = 0.031$).
 
 The lesson is not merely that temporal models outperform static ones. It is that \textbf{how you measure matters as much as what you build}. AUC-ROC averages across all thresholds; operational deployment uses one. For extreme-imbalance problems with constrained analyst capacity, threshold-specific metrics like Recall@$k$\%FPR are not supplementary---they are primary.
 
-Three additional findings bear emphasis. First, USB device activity is the strongest attack indicator, suggesting that removable media monitoring should be prioritized in deployment. Second, 14-day windows optimize the operationally relevant metric (Recall@5\%FPR = 0.199), even though 30-day windows achieve higher AUC-ROC---a further instance of the metric paradox. Third, and most soberly, 86\% of attack sequences evade detection even under the best model. The ``boiling frog'' pattern---insiders who pace their activity to stay within normal bounds---represents a fundamental challenge for any system that defines threats as deviations from a learned baseline.
+Three additional findings bear emphasis. First, USB device activity is the strongest attack indicator, suggesting that removable media monitoring should be prioritized in deployment. Second, the 7-day window is optimal on every metric we measured (AUC-ROC 0.770, Recall@5\%FPR 0.149); extending the window to 14 or 30 days dilutes attack signal and degrades both ranking and operational recall, validating the sequence length used throughout. Third, and most soberly, 86\% of attack sequences evade detection even under the best model. The ``boiling frog'' pattern---insiders who pace their activity to stay within normal bounds---represents a fundamental challenge for any system that defines threats as deviations from a learned baseline.
 
 Future work should investigate: (1) peer-group normalization to detect subtle within-role anomalies, (2) hybrid approaches combining behavioral anomaly scores with data-centric indicators such as sensitive file classifications, and (3) Transformer architectures with self-attention for improved interpretability of temporal patterns.
 
